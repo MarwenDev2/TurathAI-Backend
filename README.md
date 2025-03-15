@@ -57,8 +57,3 @@ We welcome contributions! Follow these steps:
 2. Create a new branch: `git checkout -b feature-branch`
 3. Make your changes and commit: `git commit -m "Added new feature"`
 4. Push to your fork and submit a pull request.
-
----
-
-## 📞 Contact
-For questions or collaborations, reach out via GitHub issues or email us at **support@turathai.com**.
