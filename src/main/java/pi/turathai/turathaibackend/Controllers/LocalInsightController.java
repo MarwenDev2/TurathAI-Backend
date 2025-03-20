@@ -3,6 +3,7 @@ package pi.turathai.turathaibackend.Controllers;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pi.turathai.turathaibackend.Entites.LocalInsight;
@@ -16,7 +17,10 @@ import java.util.List;
 public class LocalInsightController {
 
     public LocalInsightService localInsightService;
-
+    @Autowired
+    public LocalInsightController(LocalInsightService localInsightService) {
+        this.localInsightService = localInsightService;
+    }
     @GetMapping
     public List<LocalInsight> getAllLocalInsights() {
         return localInsightService.getAllLocalInsights();
