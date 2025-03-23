@@ -81,7 +81,6 @@
                 </configuration>
             </plugin>
             <plugin>
-                git add .                <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <excludes>
