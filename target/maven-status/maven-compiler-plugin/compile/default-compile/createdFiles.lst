@@ -9,6 +9,9 @@ pi\turathai\turathaibackend\Entites\Category.class
 pi\turathai\turathaibackend\Entites\CrowdHeatMap.class
 pi\turathai\turathaibackend\Entites\Image.class
 pi\turathai\turathaibackend\Entites\User.class
+pi\turathai\turathaibackend\Services\IWishlistService.class
+pi\turathai\turathaibackend\Controllers\WishlistController.class
+pi\turathai\turathaibackend\Repositories\WishlistRepository.class
 pi\turathai\turathaibackend\Entites\HeritageSite.class
 pi\turathai\turathaibackend\Entites\Review.class
 pi\turathai\turathaibackend\Entites\Itinery.class
@@ -16,3 +19,4 @@ pi\turathai\turathaibackend\Entites\Business.class
 pi\turathai\turathaibackend\Entites\Event.class
 pi\turathai\turathaibackend\Entites\Forum.class
 pi\turathai\turathaibackend\Entites\Earned.class
+pi\turathai\turathaibackend\Services\WishlistService.class
