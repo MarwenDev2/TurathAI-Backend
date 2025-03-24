@@ -11,16 +11,15 @@ import java.sql.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Stop {
-
-    private int order;
+    @Id
+    private int stopOrder;
     private String duration;
 
-    @Id
     @ManyToOne
     @JoinColumn(name = "idItinery")
     private Itinery itinery;
 
-    @Id
+
     @ManyToOne
     @JoinColumn(name = "idSite")
     private HeritageSite heritageSite;

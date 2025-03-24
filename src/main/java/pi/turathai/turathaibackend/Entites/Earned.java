@@ -12,15 +12,17 @@ import java.sql.Date;
 @NoArgsConstructor
 public class Earned {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id; // Unique ID instead of composite key
+
     private Date earnedAt;
 
-    @Id
     @ManyToOne
-    @JoinColumn(name = "idUser")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Id
     @ManyToOne
-    @JoinColumn(name = "idBadge")
+    @JoinColumn(name = "badge_id", nullable = false)
     private Badge badge;
 }
