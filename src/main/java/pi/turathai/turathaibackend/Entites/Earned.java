@@ -12,14 +12,16 @@ import java.sql.Date;
 @NoArgsConstructor
 public class Earned {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
     private Date earnedAt;
 
-    @Id
     @ManyToOne
     @JoinColumn(name = "idUser")
     private User user;
 
-    @Id
     @ManyToOne
     @JoinColumn(name = "idBadge")
     private Badge badge;
