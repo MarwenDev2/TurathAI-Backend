@@ -1,7 +1,5 @@
-/*
+
 package pi.turathai.turathaibackend.Services;
-
-
 import org.springframework.stereotype.Service;
 import pi.turathai.turathaibackend.Entites.*;
 import pi.turathai.turathaibackend.Repositories.BadgeRepository;
@@ -62,5 +60,4 @@ public class EarnedService implements IEarnedService {
         earnedRepository.deleteById(earnedId);
     }
 }
-*/
 

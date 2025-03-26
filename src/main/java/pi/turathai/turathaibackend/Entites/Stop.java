@@ -12,6 +12,9 @@ import java.sql.Date;
 @NoArgsConstructor
 public class Stop {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
     private int stopOrder;
     private String duration;
 

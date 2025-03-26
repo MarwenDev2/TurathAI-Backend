@@ -15,6 +15,7 @@ public class BadgeService implements IBadgeService {
         this.badgeRepository = badgeRepository;
     }
 
+
     public Badge createBadge(Badge badge) {
         if (badgeRepository.existsByName(badge.getName())) {
             throw new RuntimeException("Badge with this name already exists!");

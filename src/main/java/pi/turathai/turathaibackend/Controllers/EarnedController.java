@@ -1,4 +1,4 @@
-/*
+
 package pi.turathai.turathaibackend.Controllers;
 
 
@@ -37,4 +37,3 @@ public class EarnedController {
         earnedService.revokeBadge(earnedId);
     }
 }
-*/
