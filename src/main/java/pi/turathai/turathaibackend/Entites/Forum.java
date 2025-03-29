@@ -3,7 +3,7 @@ package pi.turathai.turathaibackend.Entites;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -18,7 +18,8 @@ public class Forum {
     private String title;
     private String description;
     private String image;
-    private Date createdAt;
+
+    private LocalDateTime createdAt; // ✅ Correct
 
     @ManyToOne
     @JoinColumn(name = "idUser")
