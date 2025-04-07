@@ -12,14 +12,16 @@ import java.sql.Date;
 @NoArgsConstructor
 public class Wishlist {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
     private Date createdAt;
 
-    @Id
     @ManyToOne
     @JoinColumn(name = "idUser")
     private User user;
 
-    @Id
     @ManyToOne
     @JoinColumn(name = "idSite")
     private HeritageSite heritageSite;
