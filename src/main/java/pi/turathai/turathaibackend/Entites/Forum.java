@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -23,4 +24,8 @@ public class Forum {
     @ManyToOne
     @JoinColumn(name = "idUser")
     private User user;
+
+    @OneToMany(mappedBy = "forum", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments;
+
 }

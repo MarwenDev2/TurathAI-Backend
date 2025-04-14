@@ -23,14 +23,16 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/**").permitAll() // Allow access to /api/users
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll() // Allow access to Swagger
-                        .anyRequest().authenticated() // Secure all other endpoints
+                        .requestMatchers("/api/comments").permitAll() // Permet l'accès à POST /api/comments
+                        .requestMatchers("/api/**").permitAll() // Permet l'accès à tous les autres /api endpoints
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll() // Permet l'accès à Swagger
+                        .anyRequest().authenticated() // Toutes les autres requêtes nécessitent une authentification
                 )
-                .csrf(csrf -> csrf.disable()); // Disable CSRF for simplicity (optional)
-        http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
+                .csrf(csrf -> csrf.disable()) // Désactive CSRF pour la simplicité (optionnel)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())); // Active CORS
         return http.build();
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
