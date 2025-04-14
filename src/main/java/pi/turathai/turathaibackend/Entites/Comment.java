@@ -14,7 +14,7 @@ public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;  // Ajout d'un ID unique
+    private long id;
 
     private String content;
     private String image;
