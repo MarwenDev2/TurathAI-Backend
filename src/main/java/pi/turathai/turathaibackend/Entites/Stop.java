@@ -11,17 +11,17 @@ import java.sql.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Stop {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private int stopOrder;
+    private int order;
     private String duration;
 
     @ManyToOne
     @JoinColumn(name = "idItinery")
     private Itinery itinery;
-
 
     @ManyToOne
     @JoinColumn(name = "idSite")

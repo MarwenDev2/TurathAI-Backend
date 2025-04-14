@@ -23,12 +23,14 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/**").permitAll() // Allow access to /api/users
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll() // Allow access to Swagger
-                        .anyRequest().authenticated() // Secure all other endpoints
+                        .requestMatchers("/api/auth/**").permitAll()  // Allow auth endpoints
+                        .requestMatchers("/api/users").permitAll()  // Explicitly allow registration
+                        .requestMatchers("/api/**").authenticated()  // Secure other API endpoints
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .anyRequest().authenticated()
                 )
-                .csrf(csrf -> csrf.disable()); // Disable CSRF for simplicity (optional)
-        http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()));
         return http.build();
     }
 
@@ -51,11 +53,9 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationManager authenticationManager(
-
             PasswordEncoder passwordEncoder) throws Exception {
 
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-
         authProvider.setPasswordEncoder(passwordEncoder);
 
         return new ProviderManager(authProvider);

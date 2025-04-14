@@ -14,15 +14,15 @@ public class Earned {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // Unique ID instead of composite key
+    private long id;
 
     private Date earnedAt;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "idUser")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "badge_id", nullable = false)
+    @JoinColumn(name = "idBadge")
     private Badge badge;
 }

@@ -2,13 +2,17 @@ package pi.turathai.turathaibackend.Controllers;
 
 import lombok.RequiredArgsConstructor;
 import pi.turathai.turathaibackend.Services.IUserService;
+import pi.turathai.turathaibackend.Services.IUserPreferencesService;
 import pi.turathai.turathaibackend.Entites.User;
+import pi.turathai.turathaibackend.Entites.UserPreferences;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(origins= "http://Localhost:4200")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
