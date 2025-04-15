@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Date;
+<<<<<<< HEAD
+=======
+
+>>>>>>> main
 @Entity
 @Getter
 @Setter
@@ -15,7 +19,10 @@ public class Stop {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+<<<<<<< HEAD
     @Column(name = "`order`")
+=======
+>>>>>>> main
     private int order;
     private String duration;
 
