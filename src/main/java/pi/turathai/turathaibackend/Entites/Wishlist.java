@@ -5,9 +5,6 @@ import lombok.*;
 
 import java.sql.Date;
 
-<<<<<<< HEAD
-@Entity
-=======
 /**
  * Wishlist entity representing a user's saved heritage sites.
  * Ensures uniqueness per user-heritage site pair.
@@ -17,25 +14,11 @@ import java.sql.Date;
 @Table(name = "wishlist", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"idUser", "idSite"}) //This ensures that a user cannot add the same heritage site multiple times to their wishlist : no duplicates entries
 })
->>>>>>> main
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Wishlist {
-<<<<<<< HEAD
-
-    private Date createdAt;
-
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "idUser")
-    private User user;
-
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "idSite")
-=======
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // Primary key
@@ -52,6 +35,5 @@ public class Wishlist {
 
     @ManyToOne
     @JoinColumn(name = "idSite", nullable = false)
->>>>>>> main
     private HeritageSite heritageSite;
 }

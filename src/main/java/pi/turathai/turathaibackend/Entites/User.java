@@ -1,12 +1,5 @@
 package pi.turathai.turathaibackend.Entites;
 
-<<<<<<< HEAD
-
-import jakarta.persistence.*;
-import lombok.*;
-
-import java.sql.Date;
-=======
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -17,18 +10,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.sql.Date;
 import java.util.Collection;
 import java.util.Collections;
->>>>>>> main
 
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-<<<<<<< HEAD
-public class User {
-=======
 public class User implements UserDetails {
->>>>>>> main
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,17 +24,6 @@ public class User implements UserDetails {
 
     private String firstName;
     private String lastName;
-<<<<<<< HEAD
-    private String email;
-    private String password;
-    private String role;
-    private String originCountry;
-    private String SpokenLanguage;
-    private String interests;
-    private Date createdAt;
-
-}
-=======
 
     @Column(unique = true)
     private String email;
@@ -89,4 +66,3 @@ public class User implements UserDetails {
         return true;
     }
 }
->>>>>>> main

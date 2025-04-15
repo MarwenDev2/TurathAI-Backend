@@ -18,12 +18,8 @@ public class Badge {
     private String name;
     private String description;
 
-<<<<<<< HEAD
-    @OneToMany(mappedBy = "badge", cascade = CascadeType.ALL)
-=======
     @OneToMany(mappedBy = "badge", cascade = CascadeType.ALL, orphanRemoval = true)
     //orphanRemoval = true → Deletes earned records when a badge is deleted
->>>>>>> main
     private List<Earned> earnedBadges;
 
 }
