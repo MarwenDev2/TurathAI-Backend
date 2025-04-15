@@ -1,6 +1,5 @@
 package pi.turathai.turathaibackend.Entites;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,7 +17,6 @@ public class Category {
 
     private String name;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<HeritageSite> heritageSites;
 

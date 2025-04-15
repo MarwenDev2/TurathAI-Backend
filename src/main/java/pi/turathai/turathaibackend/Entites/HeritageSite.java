@@ -5,7 +5,6 @@ import lombok.*;
 
 import java.util.List;
 import java.util.Set;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Getter
@@ -30,7 +29,6 @@ public class HeritageSite {
     @OneToMany(mappedBy = "heritageSite", cascade = CascadeType.ALL)
     private List<LocalInsight> localInsights;
 
-    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "idCategory")
     private Category category;

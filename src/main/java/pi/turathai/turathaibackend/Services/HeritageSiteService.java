@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pi.turathai.turathaibackend.Entites.HeritageSite;
-import pi.turathai.turathaibackend.Interfaces.IHeritageSite;
+import pi.turathai.turathaibackend.Services.IHeritageSite;
 import pi.turathai.turathaibackend.Repositories.HeritageSiteRepo;
 
 import java.util.List;
