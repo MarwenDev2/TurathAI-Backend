@@ -3,12 +3,8 @@ package pi.turathai.turathaibackend.Entites;
 import jakarta.persistence.*;
 import lombok.*;
 
-<<<<<<< HEAD
-import java.sql.Date;
-import java.util.List;
-=======
 import java.time.LocalDateTime;
->>>>>>> a07ebc221fe59784c111634b5e124c10d13a4ec9
+import java.util.List;
 
 @Entity
 @Getter
@@ -24,7 +20,7 @@ public class Forum {
     private String description;
     private String image;
 
-    private LocalDateTime createdAt; // ✅ Correct
+    private LocalDateTime createdAt;
 
     @ManyToOne
     @JoinColumn(name = "idUser")
@@ -32,5 +28,4 @@ public class Forum {
 
     @OneToMany(mappedBy = "forum", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
-
 }
