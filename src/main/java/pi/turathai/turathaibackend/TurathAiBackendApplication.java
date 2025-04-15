@@ -7,8 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class TurathAiBackendApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(TurathAiBackendApplication.class, args);
 
+        SpringApplication.run(TurathAiBackendApplication.class, args);
     }
 
 }

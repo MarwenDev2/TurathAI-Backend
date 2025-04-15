@@ -11,18 +11,26 @@ import java.sql.Date;
 @NoArgsConstructor
 public class Review {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
     private int rating;
     private String comment;
     private Date createdAt;
+    private boolean flagged;  // Attribute to flag inappropriate reviews
 
-    @Id
     @ManyToOne
     @JoinColumn(name = "idUser")
     private User user;
 
-    @Id
     @ManyToOne
     @JoinColumn(name = "idSite")
     private HeritageSite heritageSite;
 
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = new Date(System.currentTimeMillis());
+    }
 }

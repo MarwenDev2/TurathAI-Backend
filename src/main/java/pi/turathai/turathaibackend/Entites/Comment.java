@@ -12,18 +12,20 @@ import java.sql.Date;
 @NoArgsConstructor
 public class Comment {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
     private String content;
     private String image;
     private Date createdAt;
     private int liked;
     private int disliked;
 
-    @Id
     @ManyToOne
     @JoinColumn(name = "idUser")
     private User user;
 
-    @Id
     @ManyToOne
     @JoinColumn(name = "idForum")
     private Forum forum;
