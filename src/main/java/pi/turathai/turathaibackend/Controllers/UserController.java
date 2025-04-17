@@ -1,6 +1,7 @@
 package pi.turathai.turathaibackend.Controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import pi.turathai.turathaibackend.Services.IUserService;
 import pi.turathai.turathaibackend.Services.IUserPreferencesService;
 import pi.turathai.turathaibackend.Entites.User;
@@ -8,6 +9,7 @@ import pi.turathai.turathaibackend.Entites.UserPreferences;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,5 +50,16 @@ public class UserController {
     @GetMapping("/email/{email}")
     public User getUserByEmail(@PathVariable String email) {
         return userService.findUserByEmail(email);
+    }
+
+    // Add to your UserController.java
+    @GetMapping("/me")
+    public ResponseEntity<User> getCurrentUser(Principal principal) {
+        String email = principal.getName();
+        User user = userService.findUserByEmail(email);
+        if (user != null) {
+            return ResponseEntity.ok(user);
+        }
+        return ResponseEntity.notFound().build();
     }
 }
