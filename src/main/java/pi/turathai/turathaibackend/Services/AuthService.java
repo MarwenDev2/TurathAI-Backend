@@ -40,12 +40,31 @@ public class AuthService {
 
     public String loginUser(String email, String password) {
         try {
+            User user = userRepository.findByEmail(email);
+            if (user == null) {
+                throw new RuntimeException("User not found");
+            }
+
+            System.out.println("User found: " + user.getEmail());
+            System.out.println("Password matches: " + passwordEncoder.matches(password, user.getPassword()));
+            System.out.println("User authorities: " + user.getAuthorities());
+
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(email, password)
             );
+
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            return jwtUtil.generateToken((User) authentication.getPrincipal());
+
+            // Get the email from authentication and fetch your User entity
+            String authenticatedEmail = authentication.getName();
+            User authenticatedUser = userRepository.findByEmail(authenticatedEmail);
+
+            System.out.println("Authenticated user: " + authenticatedUser.getEmail());
+
+            return jwtUtil.generateToken(authenticatedUser);
         } catch (Exception e) {
+            System.out.println("Authentication error: " + e.getMessage());
+            e.printStackTrace();
             throw new RuntimeException("Invalid email or password");
         }
     }

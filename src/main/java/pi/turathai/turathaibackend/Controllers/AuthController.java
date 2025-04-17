@@ -1,5 +1,6 @@
 package pi.turathai.turathaibackend.Controllers;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import pi.turathai.turathaibackend.Entites.User;
 import pi.turathai.turathaibackend.Services.AuthService;
@@ -30,9 +31,13 @@ public class AuthController {
     public ResponseEntity<?> loginUser(@RequestBody User user) {
         try {
             String token = authService.loginUser(user.getEmail(), user.getPassword());
-            return ResponseEntity.ok().body(Map.of("token", token));
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(Map.of("token", token));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(Map.of("error", e.getMessage()));
         }
     }
 
