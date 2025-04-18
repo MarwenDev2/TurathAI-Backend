@@ -10,6 +10,7 @@ import pi.turathai.turathaibackend.Services.IForumService;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(origins= "http://Localhost:4200")
 @RestController
 @RequestMapping("/api/forums")
 @RequiredArgsConstructor

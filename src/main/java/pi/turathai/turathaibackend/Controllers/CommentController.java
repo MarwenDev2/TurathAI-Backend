@@ -11,6 +11,7 @@ import pi.turathai.turathaibackend.Services.ICommentService;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(origins= "http://Localhost:4200")
 @RestController
 @RequestMapping("/api/comments")
 @RequiredArgsConstructor

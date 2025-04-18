@@ -1,4 +1,4 @@
-package pi.turathai.turathaibackend.services;
+package pi.turathai.turathaibackend.Services;
 
 import pi.turathai.turathaibackend.Entites.Itinery;
 

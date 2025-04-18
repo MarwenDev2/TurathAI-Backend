@@ -10,7 +10,7 @@ import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/Sites")
+@RequestMapping("/api/Sites")
 public class HeritageSiteController {
 
 

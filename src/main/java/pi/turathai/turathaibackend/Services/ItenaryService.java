@@ -1,10 +1,10 @@
-package pi.turathai.turathaibackend.services;
+package pi.turathai.turathaibackend.Services;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pi.turathai.turathaibackend.Entites.Itinery;
-import pi.turathai.turathaibackend.repository.ItenaryRepo;
+import pi.turathai.turathaibackend.Repositories.ItenaryRepo;
 
 import java.util.List;
 

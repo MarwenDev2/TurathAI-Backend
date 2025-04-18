@@ -11,6 +11,7 @@ import pi.turathai.turathaibackend.Services.LocalInsightService;
 
 import java.util.List;
 
+@CrossOrigin(origins= "http://Localhost:4200")
 @RestController
 @RequestMapping("/api/local-insights")
 @RequiredArgsConstructor

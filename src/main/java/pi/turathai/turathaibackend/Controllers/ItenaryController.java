@@ -1,14 +1,15 @@
-package pi.turathai.turathaibackend.controller;
+package pi.turathai.turathaibackend.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pi.turathai.turathaibackend.Entites.Itinery;
-import pi.turathai.turathaibackend.services.IItineryService;
+import pi.turathai.turathaibackend.Services.IItineryService;
 
 import java.util.List;
 
+@CrossOrigin(origins= "http://Localhost:4200")
 @RestController
-@RequestMapping("/itineries")
+@RequestMapping("/api/itineries")
 public class ItenaryController {
 
     @Autowired

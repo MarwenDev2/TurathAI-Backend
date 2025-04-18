@@ -7,8 +7,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins= "http://Localhost:4200")
 @RestController
-@RequestMapping("/wishlist")
+@RequestMapping("/api/wishlist")
 public class WishlistController {
 
     private final IWishlistService wishlistService;

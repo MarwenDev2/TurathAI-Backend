@@ -29,7 +29,22 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()  // Allow auth endpoints
-                        .requestMatchers("/api/users").permitAll()  // Explicitly allow registration
+                        .requestMatchers("/api/users/**").permitAll()  // Explicitly allow registration
+                        .requestMatchers("/api/badges/**").permitAll()
+                        .requestMatchers("/api/businesses/**").permitAll()
+                        .requestMatchers("/api/Categories/**").permitAll()
+                        .requestMatchers("/api/comments/**").permitAll()
+                        .requestMatchers("/api/crowd-heatmaps/**").permitAll()
+                        .requestMatchers("/api/earned/**").permitAll()
+                        .requestMatchers("/api/events/**").permitAll()
+                        .requestMatchers("/api/forums/**").permitAll()
+                        .requestMatchers("/api/Sites/**").permitAll()
+                        .requestMatchers("/api/itineries/**").permitAll()
+                        .requestMatchers("/api/reviews/**").permitAll()
+                        .requestMatchers("/api/local-insights/**").permitAll()
+                        .requestMatchers("/api/stops/**").permitAll()
+                        .requestMatchers("/api/user-preferences/**").permitAll()
+                        .requestMatchers("/api/wishlist/**").permitAll()
                         .requestMatchers("/api/**").authenticated()  // Secure other API endpoints
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated()
