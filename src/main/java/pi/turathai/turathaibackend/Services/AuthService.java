@@ -5,6 +5,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pi.turathai.turathaibackend.DTO.UserDTO;
@@ -23,6 +25,8 @@ public class AuthService {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    private UserDetailsService userDetailsService;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -86,5 +90,21 @@ public class AuthService {
         } catch (Exception e) {
             return false;
         }
+    }
+    // In AuthService.java
+    public String refreshToken(String oldToken) {
+        String username = jwtUtil.extractUsername(oldToken);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+        if (!jwtUtil.validateToken(oldToken,userDetails)) {
+            throw new RuntimeException("Invalid token");
+        }
+
+
+        if (!jwtUtil.validateToken(oldToken, userDetails)) {
+            throw new RuntimeException("Token validation failed");
+        }
+
+        return jwtUtil.generateToken(userDetails);
     }
 }

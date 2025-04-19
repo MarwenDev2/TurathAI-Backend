@@ -47,6 +47,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/user-preferences/**").permitAll()
                         .requestMatchers("/api/wishlist/**").permitAll()
                         .requestMatchers("/api/upload", "/assets/**").permitAll()
+                        .requestMatchers("/images/**").permitAll()
                         .requestMatchers("/api/**").authenticated()  // Secure other API endpoints
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated()

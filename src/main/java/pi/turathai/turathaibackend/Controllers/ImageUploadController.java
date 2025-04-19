@@ -11,12 +11,13 @@ import java.nio.file.*;
 import java.util.*;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/upload")
+@CrossOrigin(origins = "http://localhost:4200")
 public class ImageUploadController {
 
     private final String UPLOAD_DIR = "src/main/resources/static/assets/images/users/";
 
-    @PostMapping("/upload")
+    @PostMapping()
     public ResponseEntity<Map<String, String>> uploadImage(@RequestParam("image") MultipartFile file) {
         Map<String, String> response = new HashMap<>();
 
