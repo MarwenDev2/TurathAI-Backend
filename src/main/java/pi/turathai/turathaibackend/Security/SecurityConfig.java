@@ -15,6 +15,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import pi.turathai.turathaibackend.Services.CustomUserDetailsService;
 
 @Configuration
@@ -45,6 +46,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/stops/**").permitAll()
                         .requestMatchers("/api/user-preferences/**").permitAll()
                         .requestMatchers("/api/wishlist/**").permitAll()
+                        .requestMatchers("/api/upload", "/assets/**").permitAll()
                         .requestMatchers("/api/**").authenticated()  // Secure other API endpoints
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated()

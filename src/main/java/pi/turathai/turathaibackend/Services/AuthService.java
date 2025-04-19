@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import pi.turathai.turathaibackend.DTO.UserDTO;
 import pi.turathai.turathaibackend.Entites.User;
 import pi.turathai.turathaibackend.Repositories.UserRepository;
 import pi.turathai.turathaibackend.Security.JwtUtil;
@@ -26,14 +27,22 @@ public class AuthService {
     @Autowired
     private JwtUtil jwtUtil;
 
-    public User registerUser(User user) {
-        if (userRepository.existsByEmail(user.getEmail())) {
+    public User registerUser(UserDTO userDto) {
+        if (userRepository.existsByEmail(userDto.getEmail())) {
             throw new RuntimeException("Email already in use");
         }
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole("USER"); // Default role
+        User user = new User();
+        user.setFirstName(userDto.getFirstName());
+        user.setLastName(userDto.getLastName());
+        user.setEmail(userDto.getEmail());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        user.setOriginCountry(userDto.getOriginCountry());
+        user.setSpokenLanguage(userDto.getSpokenLanguage());
+        user.setInterests(userDto.getInterests());
+        user.setRole("USER");
         user.setCreatedAt(new java.sql.Date(System.currentTimeMillis()));
+        user.setImage(userDto.getImage());
 
         return userRepository.save(user);
     }

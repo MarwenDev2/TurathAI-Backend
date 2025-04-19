@@ -2,11 +2,15 @@ package pi.turathai.turathaibackend.Controllers;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import pi.turathai.turathaibackend.DTO.UserDTO;
 import pi.turathai.turathaibackend.Entites.User;
 import pi.turathai.turathaibackend.Services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import pi.turathai.turathaibackend.Services.UserService;
 
+import java.util.Date;
 import java.util.Map;
 
 @CrossOrigin(origins= "http://Localhost:4200")
@@ -18,9 +22,9 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody User user) {
+    public ResponseEntity<?> registerUser(@RequestBody UserDTO userDto) {
         try {
-            User registeredUser = authService.registerUser(user);
+            User registeredUser = authService.registerUser(userDto);
             return ResponseEntity.ok(registeredUser);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
