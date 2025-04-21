@@ -1,4 +1,5 @@
 package pi.turathai.turathaibackend.Entites;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,6 +21,7 @@ public class LocalInsight {
     private String audioURL;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "idSite")
     private HeritageSite heritageSite;
 
