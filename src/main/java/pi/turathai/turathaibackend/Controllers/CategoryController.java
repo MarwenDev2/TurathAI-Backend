@@ -49,4 +49,9 @@ public class CategoryController {
     {
         return categoryService.getAll();
     }
+
+    @GetMapping("/count")
+    public long getCategoryCount() {
+        return categoryService.countCategories();
+    }
 }

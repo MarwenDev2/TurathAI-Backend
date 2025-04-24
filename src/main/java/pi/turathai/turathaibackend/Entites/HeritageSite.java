@@ -29,6 +29,7 @@ public class HeritageSite {
     @OneToMany(mappedBy = "heritageSite", cascade = CascadeType.ALL)
     private List<LocalInsight> localInsights;
 
+
     @ManyToOne
     @JoinColumn(name = "idCategory")
     private Category category;

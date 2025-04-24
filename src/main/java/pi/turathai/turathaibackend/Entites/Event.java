@@ -1,4 +1,5 @@
 package pi.turathai.turathaibackend.Entites;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,6 +22,7 @@ public class Event {
     private Date startDate;
     private Date endDate;
     private String location;
+
 
     @ManyToOne
     @JoinColumn(name = "idSite")
