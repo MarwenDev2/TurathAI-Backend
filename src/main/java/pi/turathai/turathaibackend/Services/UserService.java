@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pi.turathai.turathaibackend.Entites.User;
-import pi.turathai.turathaibackend.Entites.UserPreferences;
 import pi.turathai.turathaibackend.Repositories.*;
 
 import java.util.List;
@@ -54,6 +53,11 @@ public class UserService implements IUserService {
     @Override
     public boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
+    }
+
+    @Override
+    public User getLastCreatedUser() {
+        return userRepository.findTopByOrderByIdDesc(); // assuming 'id' is your PK
     }
 
 }

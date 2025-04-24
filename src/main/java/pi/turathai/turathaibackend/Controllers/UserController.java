@@ -62,4 +62,14 @@ public class UserController {
         }
         return ResponseEntity.notFound().build();
     }
+
+    @GetMapping("/last-id")
+    public ResponseEntity<Long> getLastUserId() {
+        User lastUser = userService.getLastCreatedUser();
+        if (lastUser != null) {
+            return ResponseEntity.ok(lastUser.getId());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
 }

@@ -1,5 +1,6 @@
 package pi.turathai.turathaibackend.Controllers;
 
+import pi.turathai.turathaibackend.Repositories.UserRepository;
 import pi.turathai.turathaibackend.Services.IUserPreferencesService;
 import pi.turathai.turathaibackend.Entites.UserPreferences;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +15,13 @@ public class UserPreferencesController {
 
     @Autowired
     private IUserPreferencesService userPreferencesService;
+    private UserRepository userRepository;
 
     @PostMapping
     public UserPreferences createUserPreferences(@RequestBody UserPreferences preferences) {
+        if (!userRepository.existsById(preferences.getUser().getId())) {
+            throw new RuntimeException("User not found with id: " + preferences.getUser().getId());
+        }
         return userPreferencesService.createUserPreferences(preferences);
     }
 

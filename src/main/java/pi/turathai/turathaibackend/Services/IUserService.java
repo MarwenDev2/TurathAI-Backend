@@ -13,4 +13,6 @@ public interface IUserService {
     void deleteUser(Long userId);
     User findUserByEmail(String email);
     boolean existsByEmail(String email);
+
+    User getLastCreatedUser();
 }
