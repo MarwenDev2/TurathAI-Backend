@@ -39,7 +39,6 @@ public class UserService implements IUserService {
             return userRepository.save(userDetails);
         }).orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
     }
-
     @Override
     public void deleteUser(Long userId) {
         userRepository.deleteById(userId);
@@ -58,6 +57,12 @@ public class UserService implements IUserService {
     @Override
     public User getLastCreatedUser() {
         return userRepository.findTopByOrderByIdDesc(); // assuming 'id' is your PK
+    }
+
+    @Override
+    public void changeUserPassword(User user, String newPassword) {
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
     }
 
 }
