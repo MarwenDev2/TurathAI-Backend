@@ -14,7 +14,7 @@ import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/api/Categories")
+@RequestMapping("/Categories")
 public class CategoryController {
 
     @Autowired
@@ -48,5 +48,10 @@ public class CategoryController {
     public List<Category> getAllCategories()
     {
         return categoryService.getAll();
+    }
+
+    @GetMapping("/count")
+    public long getCategoryCount() {
+        return categoryService.countCategories();
     }
 }

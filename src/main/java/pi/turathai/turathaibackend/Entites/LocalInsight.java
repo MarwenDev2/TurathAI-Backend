@@ -25,4 +25,5 @@ public class LocalInsight {
     @JoinColumn(name = "idSite")
     private HeritageSite heritageSite;
 
+
 }

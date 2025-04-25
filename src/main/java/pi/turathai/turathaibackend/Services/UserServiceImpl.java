@@ -62,4 +62,10 @@ public class UserServiceImpl implements IUserService {
         return userRepository.findTopByOrderByIdDesc(); // assuming 'id' is your PK
     }
 
+    @Override
+    public void changeUserPassword(User user, String newPassword) {
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
+
 }

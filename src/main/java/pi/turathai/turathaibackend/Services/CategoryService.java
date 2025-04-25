@@ -51,4 +51,8 @@ public class CategoryService implements ICategory {
         log.info("fetch All categories : ");
         return categoryRepo.findAll();
     }
+
+    public long countCategories() {
+        return categoryRepo.count();
+    }
 }

@@ -48,18 +48,6 @@ public class ReviewService implements IReviewService {
      * @param heritageSite The heritage site for which we are calculating the average rating
      * @return Average rating of the heritage site
      */
-    public double calculateAverageRating(Long heritageSite) {
-        List<Review> reviews = reviewRepository.findAll().stream()
-                .filter(review -> review.getHeritageSite().equals(heritageSite))
-                .toList();
-
-        if (reviews.isEmpty()) {
-            return 0;  // No reviews, return 0
-        }
-
-        int totalRating = reviews.stream().mapToInt(Review::getRating).sum();
-        return (double) totalRating / reviews.size();
-    }
 
     /**
      * Retrieves flagged reviews.
@@ -102,5 +90,30 @@ public class ReviewService implements IReviewService {
         }
 
         return "Review not found.";
+    }
+
+    public double calculateAverageRating(Long heritageSiteId) {
+        // Use the repository method that does the calculation in the database
+        Double average = reviewRepository.calculateAverageRatingBySiteId(heritageSiteId);
+        return average != null ? average : 0.0;
+    }
+
+    // Alternative implementation if you can't modify the repository:
+    public double calculateAverageRatingAlternative(Long heritageSiteId) {
+        List<Review> reviews = reviewRepository.findAll().stream()
+                .filter(review ->
+                        review.getHeritageSite() != null &&
+                                review.getHeritageSite().getId() != null &&
+                                review.getHeritageSite().getId().equals(heritageSiteId))
+                .toList();
+
+        if (reviews.isEmpty()) {
+            return 0;
+        }
+
+        int totalRating = reviews.stream()
+                .mapToInt(Review::getRating)
+                .sum();
+        return (double) totalRating / reviews.size();
     }
 }

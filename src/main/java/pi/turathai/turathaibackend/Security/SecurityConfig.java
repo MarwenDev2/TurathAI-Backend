@@ -31,6 +31,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()  // Allow auth endpoints
                         .requestMatchers("/api/users/**").permitAll()  // Explicitly allow registration
+                        .requestMatchers("/api/auth/forgot-password", "/api/auth/reset-password").permitAll()
                         .requestMatchers("/api/badges/**").permitAll()
                         .requestMatchers("/api/businesses/**").permitAll()
                         .requestMatchers("/api/Categories/**").permitAll()
@@ -50,6 +51,14 @@ public class SecurityConfig {
                         .requestMatchers("/images/**").permitAll()
                         .requestMatchers("/api/**").authenticated()  // Secure other API endpoints
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        /////
+
+                        .requestMatchers("/api/export/**").permitAll()  // Add this line
+                        .requestMatchers("/api/itineries/export/**").permitAll()
+                        .requestMatchers("/api/export/**").permitAll()  // Add this line
+                        .requestMatchers("/api/itineries/**").permitAll()
+                        .requestMatchers("/api/qrcode/**").permitAll()  // Allow auth endpoints
+
                         .anyRequest().authenticated()
                 )
                 .csrf(csrf -> csrf.disable())

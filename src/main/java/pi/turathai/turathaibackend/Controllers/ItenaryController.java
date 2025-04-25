@@ -1,14 +1,18 @@
 package pi.turathai.turathaibackend.Controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pi.turathai.turathaibackend.DTO.ItineraryStatisticsDTO;
 import pi.turathai.turathaibackend.Entites.Itinery;
 import pi.turathai.turathaibackend.Services.IItineryService;
 
 import java.util.List;
 
-@CrossOrigin(origins= "http://Localhost:4200")
+@CrossOrigin(origins= "http://localhost:4200")
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/itineries")
 public class ItenaryController {
 
@@ -38,5 +42,10 @@ public class ItenaryController {
     @GetMapping("/all")
     public List<Itinery> getAllItineries() {
         return itineryService.getAll();
+    }
+
+    @GetMapping("/statistics")
+    public ResponseEntity<ItineraryStatisticsDTO> getStatistics() {
+        return ResponseEntity.ok(itineryService.getStatistics()); // Fixed: using instance variable
     }
 }

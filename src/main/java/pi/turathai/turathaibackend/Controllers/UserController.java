@@ -1,16 +1,25 @@
 package pi.turathai.turathaibackend.Controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import pi.turathai.turathaibackend.DTO.UserCountryDTO;
+import pi.turathai.turathaibackend.DTO.UserGrowthDTO;
+import pi.turathai.turathaibackend.DTO.UserRoleDTO;
+import pi.turathai.turathaibackend.Repositories.UserRepository;
 import pi.turathai.turathaibackend.Services.IUserService;
 import pi.turathai.turathaibackend.Services.IUserPreferencesService;
 import pi.turathai.turathaibackend.Entites.User;
 import pi.turathai.turathaibackend.Entites.UserPreferences;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import pi.turathai.turathaibackend.Services.UserStatisticsService;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @CrossOrigin(origins= "http://Localhost:4200")
@@ -22,6 +31,10 @@ public class UserController {
     @Autowired
     private IUserService userService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    private final UserStatisticsService userStatisticsService;
     @PostMapping
     public User createUser(@RequestBody User user) {
         return userService.createUser(user);
@@ -72,4 +85,44 @@ public class UserController {
         return ResponseEntity.notFound().build();
     }
 
+    @PostMapping("/change-password/{userId}")
+    public ResponseEntity<?> changePassword(@PathVariable Long userId,
+                                            @RequestBody Map<String, String> passwords) {
+        Optional<User> optionalUser = userService.getUserById(userId);
+
+        if (optionalUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message", "User not found"));
+        }
+
+        User user = optionalUser.get();
+
+        if (!passwordEncoder.matches(passwords.get("currentPassword"), user.getPassword())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Current password is incorrect"));
+        }
+
+        userService.changeUserPassword(user, passwords.get("newPassword"));
+        return ResponseEntity.ok(Map.of("message", "Password changed successfully"));
+    }
+
+
+    @GetMapping("/growth")
+    public List<UserGrowthDTO> getUserGrowth() {
+        return userStatisticsService.getUserGrowthStatistics();
+    }
+
+    @GetMapping("/by-country")
+    public List<UserCountryDTO> getUsersByCountry() {
+        return userStatisticsService.getUserCountryStatistics();
+    }
+    @GetMapping("/by-role")
+    public List<UserRoleDTO> getUsersByRole() {
+        return userStatisticsService.getUserRoleStatistics();
+    }
+
+    @GetMapping("/recent")
+    public List<User> getRecentUsers(@RequestParam(defaultValue = "5") int limit) {
+        return userStatisticsService.getRecentUsers(limit);
+    }
 }

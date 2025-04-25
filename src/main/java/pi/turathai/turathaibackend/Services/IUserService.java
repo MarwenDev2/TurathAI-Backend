@@ -15,4 +15,6 @@ public interface IUserService {
     boolean existsByEmail(String email);
 
     User getLastCreatedUser();
+
+    void changeUserPassword(User user, String newPassword);
 }
