@@ -12,6 +12,7 @@ import pi.turathai.turathaibackend.Repositories.ImageRepo;
 import pi.turathai.turathaibackend.Services.IHeritageSite;
 import pi.turathai.turathaibackend.Repositories.HeritageSiteRepo;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -25,18 +26,23 @@ public class HeritageSiteService implements IHeritageSite {
     private final HeritageSiteRepo heritageSiteRepo;
     private final CategoryRepo categoryRepo;
 
-     @Autowired
-     ImageRepo imageRepo ;
+    @Autowired
+    ImageRepo imageRepo;
 
     @Autowired
-    public HeritageSiteService(HeritageSiteRepo heritageSiteRepo, CategoryRepo categoryRepo , ImageRepo imageRepo) {
+    public HeritageSiteService(HeritageSiteRepo heritageSiteRepo, CategoryRepo categoryRepo, ImageRepo imageRepo) {
         this.heritageSiteRepo = heritageSiteRepo;
         this.categoryRepo = categoryRepo;
-        this.imageRepo = imageRepo ;
+        this.imageRepo = imageRepo;
     }
 
-
-
+    public List<HeritageSite> searchSites(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return heritageSiteRepo.findAll();
+        }
+        return heritageSiteRepo.findByNameContainingIgnoreCaseOrLocationContainingIgnoreCaseOrDescriptionContainingIgnoreCase(
+                keyword, keyword, keyword);
+    }
 
     @Override
     public HeritageSiteDTO addFromDTO(HeritageSiteDTO dto) {
@@ -115,7 +121,6 @@ public class HeritageSiteService implements IHeritageSite {
         return dto;
     }
 
-
     @Override
     public HeritageSiteDTO getByID(long id) {
         return heritageSiteRepo.findById(id)
@@ -123,8 +128,7 @@ public class HeritageSiteService implements IHeritageSite {
                 .orElse(null);
     }
 
-    public HeritageSite getSite(Long id)
-    {
+    public HeritageSite getSite(Long id) {
         return heritageSiteRepo.findById(id).orElse(null);
     }
 
@@ -136,9 +140,11 @@ public class HeritageSiteService implements IHeritageSite {
                 .collect(Collectors.toList());
     }
 
+    public List<HeritageSite> getAllE() {
+        return heritageSiteRepo.findAll();
+    }
+
     public long countSites() {
         return heritageSiteRepo.count();
     }
-
-
 }
