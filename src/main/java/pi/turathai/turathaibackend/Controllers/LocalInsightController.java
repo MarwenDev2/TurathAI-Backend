@@ -80,8 +80,15 @@ public class LocalInsightController {
         }
         return ResponseEntity.notFound().build();
     }
+    @GetMapping("/insights-by-type")
+    public List<Map<String, Object>> getInsightCountsByType() {
+        List<Object[]> result = localInsightRepository.countByType();
 
-
+        return result.stream().map(row -> Map.of(
+                "type", row[0],
+                "count", row[1]
+        )).collect(Collectors.toList());
+    }
 
 
 

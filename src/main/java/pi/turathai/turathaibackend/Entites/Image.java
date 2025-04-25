@@ -1,5 +1,6 @@
 package pi.turathai.turathaibackend.Entites;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,12 +23,15 @@ public class Image {
     private String type;
 
     @ManyToMany(mappedBy = "images")
+    @JsonIgnore
     private Set<Event> events;
 
     @ManyToMany(mappedBy = "images")
+    @JsonIgnore
     private Set<HeritageSite> heritageSites;
 
     @ManyToMany(mappedBy = "images")
+    @JsonIgnore
     private Set<Business> businesses;
 
 }

@@ -1,6 +1,8 @@
 package pi.turathai.turathaibackend.Repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pi.turathai.turathaibackend.Entites.Review;
 
@@ -30,4 +32,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     // You could also add sorting features to the queries if needed
     List<Review> findByHeritageSiteIdOrderByRatingDesc(Long heritageSiteId);
+
+    @Query("SELECT AVG(r.rating) FROM Review r WHERE r.heritageSite.id = :siteId")
+    Double calculateAverageRatingBySiteId(@Param("siteId") Long siteId);
 }

@@ -21,7 +21,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/Sites")
+@RequestMapping("/api/Sites")
 @CrossOrigin(origins = "*")
 public class HeritageSiteController {
 

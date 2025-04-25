@@ -13,9 +13,9 @@ import pi.turathai.turathaibackend.Services.FileStorageService;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/images")
-@CrossOrigin(origins = "*")
 public class ImageController {
 
     @Autowired

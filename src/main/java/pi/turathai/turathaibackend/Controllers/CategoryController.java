@@ -12,9 +12,10 @@ import java.util.List;
 
 
 
-@CrossOrigin(origins = "http://localhost:4200")
+
 @RestController
-@RequestMapping("/Categories")
+@RequestMapping("/api/Categories")
+@CrossOrigin(origins = "*")
 public class CategoryController {
 
     @Autowired
