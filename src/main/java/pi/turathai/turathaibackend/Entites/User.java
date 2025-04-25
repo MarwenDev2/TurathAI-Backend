@@ -34,6 +34,7 @@ public class User implements UserDetails {
     private String spokenLanguage;
     private String interests;
     private Date createdAt;
+    private String image;
 
     // UserDetails methods - all hidden from JSON
     @JsonIgnore

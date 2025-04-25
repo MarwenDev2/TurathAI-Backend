@@ -7,6 +7,7 @@ import pi.turathai.turathaibackend.Services.IEventsService;
 
 import java.util.List;
 
+@CrossOrigin(origins= "http://Localhost:4200")
 @RestController
 @RequestMapping("/api/events")
 @RequiredArgsConstructor
