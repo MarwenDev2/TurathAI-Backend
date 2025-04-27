@@ -12,6 +12,10 @@ import java.util.Optional;
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
+    // Add these new methods
+    List<Review> findByUserId(Long userId);
+    List<Review> findByHeritageSiteId(Long heritageSiteId);
+
     // Custom query to check if a user has reviewed a specific heritage site
     boolean existsByUserIdAndHeritageSiteId(Long userId, Long heritageSiteId);
 
@@ -33,6 +37,18 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     // You could also add sorting features to the queries if needed
     List<Review> findByHeritageSiteIdOrderByRatingDesc(Long heritageSiteId);
 
-    @Query("SELECT AVG(r.rating) FROM Review r WHERE r.heritageSite.id = :siteId")
-    Double calculateAverageRatingBySiteId(@Param("siteId") Long siteId);
+    List<Review> findByUserFirstNameContainingIgnoreCaseOrUserLastNameContainingIgnoreCase(String firstName, String lastName);
+
+    // New method for mixed filtering
+    @Query("SELECT r FROM Review r " +
+            "WHERE (:heritageSiteId IS NULL OR r.heritageSite.id = :heritageSiteId) " +
+            "AND (:minRating IS NULL OR r.rating >= :minRating) " +
+            "AND (:userName IS NULL OR LOWER(r.user.firstName) LIKE LOWER(CONCAT('%', :userName, '%')) " +
+            "   OR LOWER(r.user.lastName) LIKE LOWER(CONCAT('%', :userName, '%'))) " +
+            "AND (:keyword IS NULL OR LOWER(r.comment) LIKE LOWER(CONCAT('%', :keyword, '%')))")
+    List<Review> findReviewsWithFilters(
+            @Param("heritageSiteId") Long heritageSiteId,
+            @Param("minRating") Integer minRating,
+            @Param("userName") String userName,
+            @Param("keyword") String keyword);
 }

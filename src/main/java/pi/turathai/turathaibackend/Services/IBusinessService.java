@@ -1,12 +1,15 @@
 package pi.turathai.turathaibackend.Services;
-import pi.turathai.turathaibackend.Entites.*;
 
+import pi.turathai.turathaibackend.DTO.BusinessDTO;
+import pi.turathai.turathaibackend.Entites.Business;
 import java.util.List;
-import java.util.Optional;
+
 public interface IBusinessService {
     List<Business> getAllBusinesses();
     Business getBusinessById(Long id);
-    Business createBusiness(Business business);
-    Business updateBusiness(Long id, Business business);
+    Business createBusiness(BusinessDTO businessDTO);
+    Business updateBusiness(Long id, BusinessDTO businessDTO);
     void deleteBusiness(Long id);
+
+    List<Business> getBusinessesBySiteId(Long siteId);
 }

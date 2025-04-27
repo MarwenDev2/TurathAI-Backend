@@ -54,6 +54,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/export/**").permitAll()  // Add this line
                         .requestMatchers("/api/itineries/**").permitAll()
                         .requestMatchers("/api/qrcode/**").permitAll()  // Allow auth endpoints
+                        .requestMatchers("/api/sms/**").permitAll()
                         .requestMatchers("/api/**").authenticated()  // Secure other API endpoints
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
 

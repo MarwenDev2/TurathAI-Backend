@@ -1,9 +1,10 @@
 package pi.turathai.turathaibackend.Entites;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.sql.Date;
+import java.util.Date;
 
 @Entity
 @Getter
@@ -24,9 +25,11 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "idUser")
+    @JsonBackReference // ↔ éviter la boucle avec User
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "idForum")
+    @JsonBackReference // ↔ éviter la boucle avec Forum
     private Forum forum;
 }
