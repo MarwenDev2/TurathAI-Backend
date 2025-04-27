@@ -41,6 +41,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/earned/**").permitAll()
                         .requestMatchers("/api/events/**").permitAll()
                         .requestMatchers("/api/forums/**").permitAll()
+
+                                .requestMatchers("api/sms/send/**").permitAll()
                         .requestMatchers("/api/export/**").permitAll()  // Add this line
                         .requestMatchers("/api/itineries/export/**").permitAll()
                         .requestMatchers("/api/export/**").permitAll()  // Add this line

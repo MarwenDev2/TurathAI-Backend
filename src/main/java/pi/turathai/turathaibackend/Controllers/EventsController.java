@@ -1,8 +1,11 @@
 package pi.turathai.turathaibackend.Controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 import pi.turathai.turathaibackend.Entites.Event;
+import pi.turathai.turathaibackend.Entites.Itinery;
 import pi.turathai.turathaibackend.Services.IEventsService;
 
 import java.util.List;
@@ -39,4 +42,6 @@ public class EventsController {
     public void deleteEvent(@PathVariable Long id) {
         eventService.deleteEvent(id);
     }
+
+
 }

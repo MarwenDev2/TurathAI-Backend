@@ -1,11 +1,13 @@
 package pi.turathai.turathaibackend.Services;
+import pi.turathai.turathaibackend.Controllers.EventsController;
 import pi.turathai.turathaibackend.DTO.ItineraryStatisticsDTO;
-import pi.turathai.turathaibackend.Repositories.ItenaryRepo;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pi.turathai.turathaibackend.Entites.Itinery;
+import pi.turathai.turathaibackend.Repositories.HeritageSiteRepo;
+import pi.turathai.turathaibackend.Repositories.ItenaryRepo;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +17,7 @@ import java.util.Optional;
 public class ItenaryService implements IItineryService {
 
     @Autowired
-    private ItenaryRepo itenaryRepository;
+    private  ItenaryRepo itenaryRepository;
 
     @Override
     public Itinery add(Itinery itinery) {
