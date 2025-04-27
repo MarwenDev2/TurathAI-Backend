@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import pi.turathai.turathaibackend.DTO.SocialLoginRequest;
 import pi.turathai.turathaibackend.DTO.UserDTO;
 import pi.turathai.turathaibackend.Entites.User;
 import pi.turathai.turathaibackend.Repositories.UserRepository;
@@ -106,5 +107,65 @@ public class AuthService {
         }
 
         return jwtUtil.generateToken(userDetails);
+    }
+
+    /**
+     * Handle social login from providers like Google and Facebook
+     * This method will either create a new user if one doesn't exist with this email
+     * or authenticate an existing user
+     *
+     * @param socialUser The user details from the social provider
+     * @return JWT token for authentication
+     */
+    public String handleSocialLogin(SocialLoginRequest socialUser) {
+        try {
+            // Check if user exists
+            User user = userRepository.findByEmail(socialUser.getEmail());
+
+            if (user == null) {
+                // Create a new user with social login details
+                user = new User();
+                user.setEmail(socialUser.getEmail());
+                user.setFirstName(socialUser.getFirstName());
+                user.setLastName(socialUser.getLastName());
+
+                // Generate a secure random password (the user won't use this to log in)
+                String randomPassword = generateSecurePassword();
+                user.setPassword(passwordEncoder.encode(randomPassword));
+
+                // Set default values for required fields
+                user.setRole("USER");
+                user.setCreatedAt(new java.sql.Date(System.currentTimeMillis()));
+
+                // Set optional fields if available
+                if (socialUser.getPhotoUrl() != null && !socialUser.getPhotoUrl().isEmpty()) {
+                    user.setImage(socialUser.getPhotoUrl());
+                }
+
+                // Set default values for any other required fields
+                user.setOriginCountry("Not specified");
+                user.setSpokenLanguage("Not specified");
+                user.setInterests("Not specified");
+
+                // Save the new user
+                user = userRepository.save(user);
+                System.out.println("Created new user from social login: " + user.getEmail());
+            } else {
+                System.out.println("User already exists: " + user.getEmail());
+            }
+
+            // Create and return a JWT token for the user
+            return jwtUtil.generateToken(user);
+
+        } catch (Exception e) {
+            System.out.println("Social authentication error: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Social login failed: " + e.getMessage());
+        }
+    }
+
+    private String generateSecurePassword() {
+        // Simple implementation - in production, use a more secure method
+        return java.util.UUID.randomUUID().toString();
     }
 }

@@ -3,6 +3,7 @@ package pi.turathai.turathaibackend.Controllers;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import pi.turathai.turathaibackend.DTO.SocialLoginRequest;
 import pi.turathai.turathaibackend.DTO.UserDTO;
 import pi.turathai.turathaibackend.Entites.User;
 import pi.turathai.turathaibackend.Services.AuthService;
@@ -61,6 +62,20 @@ public class AuthController {
             return ResponseEntity.ok()
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(Map.of("token", newToken));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(Map.of("error", e.getMessage()));
+        }
+    }
+    @PostMapping("/social-login")
+    public ResponseEntity<?> socialLogin(@RequestBody SocialLoginRequest socialUser) {
+        try {
+            // Call the service method to handle social login
+            String token = authService.handleSocialLogin(socialUser);
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(Map.of("token", token));
         } catch (Exception e) {
             return ResponseEntity.badRequest()
                     .contentType(MediaType.APPLICATION_JSON)
