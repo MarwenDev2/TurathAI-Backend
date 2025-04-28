@@ -29,7 +29,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()  // Allow auth endpoints
+                        .requestMatchers("/api/auth/**").permitAll()  // Allow auth endpoint
+                        .requestMatchers("/api/reviews/**").permitAll()
                         .requestMatchers("/api/users/**").permitAll()  // Explicitly allow registration
                         .requestMatchers("/api/badges/**").permitAll()
                         .requestMatchers("/api/businesses/**").permitAll()
@@ -41,7 +42,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/forums/**").permitAll()
                         .requestMatchers("/api/Sites/**").permitAll()
                         .requestMatchers("/api/itineries/**").permitAll()
-                        .requestMatchers("/api/reviews/**").permitAll()
+                        .requestMatchers("/api/" +
+                                "/**").permitAll()
                         .requestMatchers("/api/local-insights/**").permitAll()
                         .requestMatchers("/api/stops/**").permitAll()
                         .requestMatchers("/api/user-preferences/**").permitAll()

@@ -1,98 +1,147 @@
 package pi.turathai.turathaibackend.Controllers;
 
-import org.springframework.http.HttpStatus;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pi.turathai.turathaibackend.Entites.Review;
+import pi.turathai.turathaibackend.Repositories.ReviewRepository;
 import pi.turathai.turathaibackend.Services.ReviewService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-@CrossOrigin(origins= "http://Localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/reviews")
 public class ReviewController {
 
     private final ReviewService reviewService;
+    private final  ReviewRepository reviewRepository;
 
-    public ReviewController(ReviewService reviewService) {
-        this.reviewService = reviewService;
-    }
-
-    /**
-     * Adds a review for a heritage site.
-     * @param review Review object containing the rating, comment, etc.
-     * @return Success or failure message
-     */
     @PostMapping
-    public ResponseEntity<String> addReview(@RequestBody Review review) {
-        String message = reviewService.addReview(review);
-        return new ResponseEntity<>(message, message.equals("Review added successfully.") ? HttpStatus.CREATED : HttpStatus.BAD_REQUEST);
+    public ResponseEntity<Map<String, String>> addReview(@RequestBody Review review) {
+        reviewService.addReview(review);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Review added successfully");
+        return ResponseEntity.ok(response);
+    }
+    @GetMapping
+    public List<Review> getAllReviews() {
+        return reviewService.getAllReviews();
     }
 
-    /**
-     * Retrieves all reviews for a specific heritage site.
-     * @param heritageSiteId The ID of the heritage site
-     * @return List of reviews for the heritage site
-     */
-    @GetMapping("/heritage-site/{heritageSiteId}")
-    public ResponseEntity<List<Review>> getReviewsByHeritageSite(@PathVariable Long heritageSiteId) {
-        List<Review> reviews = reviewService.getReviewsByHeritageSite(heritageSiteId);
-        return reviews.isEmpty() ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(reviews, HttpStatus.OK);
+    @GetMapping("/{id}")
+    public ResponseEntity<Review> getReviewById(@PathVariable Long id) {
+        return reviewService.getReviewById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    /**
-     * Calculates the average rating for a heritage site.
-     * @param heritageSiteId The ID of the heritage site
-     * @return Average rating of the heritage site
-     */
-    @GetMapping("/heritage-site/{heritageSiteId}/average-rating")
-    public ResponseEntity<Double> calculateAverageRating(@PathVariable Long heritageSiteId) {
-        double averageRating = reviewService.calculateAverageRating(heritageSiteId);
-        return new ResponseEntity<>(averageRating, HttpStatus.OK);
+    // New endpoint for paginated reviews
+    @GetMapping("/user/{userId}/paginated")
+    public ResponseEntity<Map<String, Object>> getReviewsByUserPaginated(
+            @PathVariable Long userId,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "5") int pageSize,
+            @RequestParam(required = false) String comment,
+            @RequestParam(required = false) String date,
+            @RequestParam(required = false) Integer rating) {
+        Map<String, Object> response = reviewService.getReviewsByUserPaginated(userId, page, pageSize, comment, date, rating);
+        return ResponseEntity.ok(response);
     }
 
-    /**
-     * Retrieves all flagged reviews.
-     * @return List of flagged reviews
-     */
-    @GetMapping("/flagged")
-    public ResponseEntity<List<Review>> getFlaggedReviews() {
-        List<Review> flaggedReviews = reviewService.getFlaggedReviews();
-        return flaggedReviews.isEmpty() ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(flaggedReviews, HttpStatus.OK);
+
+    @GetMapping("/user/{userId}/average-rating")
+    public ResponseEntity<Double> getAverageRatingByUser(@PathVariable Long userId) {
+        Double averageRating = reviewService.getAverageRatingByUser(userId);
+        return ResponseEntity.ok(averageRating);
     }
 
-    /**
-     * Retrieves reviews with a rating greater than or equal to the specified rating.
-     * @param rating Rating threshold
-     * @return List of reviews
-     */
-    @GetMapping("/byRating/{rating}")
-    public ResponseEntity<List<Review>> getReviewsByRating(@PathVariable int rating) {
-        List<Review> reviews = reviewService.getReviewsByRating(rating);
-        return reviews.isEmpty() ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(reviews, HttpStatus.OK);
+    @GetMapping("/user/{userId}/rating-distribution")
+    public ResponseEntity<Map<Integer, Long>> getRatingDistributionByUser(@PathVariable Long userId) {
+        Map<Integer, Long> distribution = reviewService.getRatingDistributionByUser(userId);
+        return ResponseEntity.ok(distribution);
     }
 
-    /**
-     * Retrieves reviews containing a specific keyword in the comment.
-     * @param keyword Keyword to search in the comment
-     * @return List of reviews
-     */
-    @GetMapping("/bycomments")
-    public ResponseEntity<List<Review>> getReviewsByKeywordInComment(@RequestParam String keyword) {
-        List<Review> reviews = reviewService.getReviewsByKeywordInComment(keyword);
-        return reviews.isEmpty() ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(reviews, HttpStatus.OK);
+    // Endpoint for recent reviews
+    @GetMapping("/user/{userId}/recent")
+    public ResponseEntity<List<Review>> getRecentReviewsByUser(
+            @PathVariable Long userId,
+            @RequestParam(defaultValue = "5") int limit) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(0, limit, sort);
+        Page<Review> recentReviews = reviewRepository.findByUserId(userId, pageable);
+        return ResponseEntity.ok(recentReviews.getContent());
     }
 
-    /**
-     * Removes a review by userId and heritageSiteId.
-     * @param userId The user ID who made the review
-     * @param heritageSiteId The heritage site ID
-     * @return Success or failure message
-     */
+    @PutMapping("/{id}")
+    public Review updateReview(@PathVariable Long id, @RequestBody Review reviewDetails) {
+        return reviewService.updateReview(id, reviewDetails);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteReview(@PathVariable Long id) {
+        reviewService.deleteReview(id);
+    }
+
     @DeleteMapping("/{userId}/heritage-site-remove/{heritageSiteId}")
-    public ResponseEntity<String> removeReview(@PathVariable Long userId, @PathVariable Long heritageSiteId) {
-        String message = reviewService.removeReview(userId, heritageSiteId);
-        return message.equals("Review removed successfully.") ? new ResponseEntity<>(message, HttpStatus.OK) : new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+    public String removeUserReview(@PathVariable Long userId, @PathVariable Long heritageSiteId) {
+        return reviewService.removeReview(userId, heritageSiteId);
     }
+
+    @GetMapping("/heritage-site/{heritageSiteId}")
+    public List<Review> getReviewsByHeritageSite(@PathVariable Long heritageSiteId) {
+        return reviewService.getReviewsByHeritageSite(heritageSiteId);
+    }
+
+    @GetMapping("/user/{userId}")
+    public List<Review> getReviewsByUser(@PathVariable Long userId) {
+        return reviewService.getReviewsByUser(userId);
+    }
+
+    @GetMapping("/heritage-site/{heritageSiteId}/average-rating")
+    public double calculateAverageRating(@PathVariable Long heritageSiteId) {
+        return reviewService.calculateAverageRating(heritageSiteId);
+    }
+
+    @GetMapping("/flagged")
+    public List<Review> getFlaggedReviews() {
+        return reviewService.getFlaggedReviews();
+    }
+
+    @GetMapping("/byRating/{rating}")
+    public List<Review> getReviewsByRating(@PathVariable int rating) {
+        return reviewService.getReviewsByRating(rating);
+    }
+
+    @GetMapping("/bycomments")
+    public List<Review> getReviewsByKeywordInComment(@RequestParam String keyword) {
+        return reviewService.getReviewsByKeywordInComment(keyword);
+    }
+
+    @GetMapping("/byUserName")
+    public List<Review> getReviewsByUserName(@RequestParam String name) {
+        return reviewService.getReviewsByUserName(name);
+    }
+
+    @GetMapping("/filter")
+    public List<Review> getReviewsWithFilters(
+            @RequestParam(required = false) Long heritageSiteId,
+            @RequestParam(required = false) Integer minRating,
+            @RequestParam(required = false) String userName,
+            @RequestParam(required = false) String keyword
+    ) {
+        return reviewService.getReviewsWithFilters(heritageSiteId, minRating, userName, keyword);
+    }
+
+
+
+
 }

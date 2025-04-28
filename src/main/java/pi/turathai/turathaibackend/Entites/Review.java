@@ -1,4 +1,7 @@
 package pi.turathai.turathaibackend.Entites;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,10 +25,12 @@ public class Review {
 
     @ManyToOne
     @JoinColumn(name = "idUser")
+    @JsonIgnoreProperties("reviews")
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "idSite")
+    @JsonIgnoreProperties({"reviews", "localInsights", "category", "images"})
     private HeritageSite heritageSite;
 
 

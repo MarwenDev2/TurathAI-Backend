@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.sql.Date;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @Entity
 @Getter
@@ -35,6 +36,8 @@ public class User implements UserDetails {
     private String interests;
     private Date createdAt;
     private String image;
+
+
 
     // UserDetails methods - all hidden from JSON
     @JsonIgnore

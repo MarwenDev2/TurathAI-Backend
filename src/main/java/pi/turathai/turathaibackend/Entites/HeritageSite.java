@@ -1,5 +1,9 @@
 package pi.turathai.turathaibackend.Entites;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,6 +28,7 @@ public class HeritageSite {
     private int popularityScore;
 
     @OneToMany(mappedBy = "heritageSite", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Review> reviews;
 
     @OneToMany(mappedBy = "heritageSite", cascade = CascadeType.ALL)
@@ -31,6 +36,7 @@ public class HeritageSite {
 
     @ManyToOne
     @JoinColumn(name = "idCategory")
+
     private Category category;
 
     @ManyToMany

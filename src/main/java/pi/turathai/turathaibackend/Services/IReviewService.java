@@ -3,9 +3,17 @@ package pi.turathai.turathaibackend.Services;
 import pi.turathai.turathaibackend.Entites.Review;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IReviewService {
 
+
+    // Add these new methods
+    List<Review> getAllReviews();
+    Optional<Review> getReviewById(Long id);
+    Review updateReview(Long id, Review reviewDetails);
+    void deleteReview(Long id);
+    List<Review> getReviewsByUser(Long userId);
     /**
      * Adds a review for a heritage site if not already added by the user.
      * @param review Review object containing the rating, comment, etc.
@@ -54,4 +62,9 @@ public interface IReviewService {
      * @return Success or failure message
      */
     String removeReview(Long userId, Long heritageSiteId);
+
+    List<Review> getReviewsByUserName(String name);
+
+    List<Review> getReviewsWithFilters(Long heritageSiteId, Integer minRating, String userName, String keyword);
 }
+

@@ -1,106 +1,181 @@
 package pi.turathai.turathaibackend.Services;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pi.turathai.turathaibackend.Entites.Review;
+import pi.turathai.turathaibackend.Entites.User;
 import pi.turathai.turathaibackend.Repositories.ReviewRepository;
+import pi.turathai.turathaibackend.Repositories.UserRepository;
 
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ReviewService implements IReviewService {
 
     private final ReviewRepository reviewRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     public ReviewService(ReviewRepository reviewRepository) {
         this.reviewRepository = reviewRepository;
     }
 
-    /**
-     * Adds a review for a heritage site if not already added by the user.
-     * @param review Review object containing the rating, comment, etc.
-     * @return Success or failure message
-     */
-    public String addReview(Review review) {
-        Long userId = review.getUser().getId();
-        Long heritageSiteId = review.getHeritageSite().getId();
 
-        // Check if the user has already reviewed the heritage site using the new custom query
-        if (reviewRepository.existsByUserIdAndHeritageSiteId(userId, heritageSiteId)) {
-            return "You have already reviewed this heritage site.";
+    // =============== BASIC CRUD OPERATIONS ===============
+
+    @Override
+    public List<Review> getAllReviews() {
+        return reviewRepository.findAll();
+    }
+
+    @Override
+    public Optional<Review> getReviewById(Long id) {
+        return reviewRepository.findById(id);
+    }
+
+    // New method for paginated reviews
+    public Map<String, Object> getReviewsByUserPaginated(Long userId, int page, int pageSize, String comment, String date, Integer rating) {
+        Pageable pageable = PageRequest.of(page - 1, pageSize);
+        LocalDate parsedDate = (date != null && !date.isEmpty()) ? LocalDate.parse(date) : null;
+        Page<Review> reviewPage = reviewRepository.findByUserIdWithFilters(
+                userId,
+                comment != null && !comment.isEmpty() ? comment : null,
+                parsedDate,
+                rating,
+                pageable
+        );
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("reviews", reviewPage.getContent());
+        response.put("total", reviewPage.getTotalElements());
+        return response;
+    }
+
+    public Double getAverageRatingByUser(Long userId) {
+        List<Review> reviews = reviewRepository.findByUserId(userId);
+        if (reviews.isEmpty()) {
+            return 0.0;
         }
+        double total = reviews.stream().mapToDouble(Review::getRating).sum();
+        return total / reviews.size();
+    }
+
+    @Override
+    public String addReview(Review review) {
+
         reviewRepository.save(review);
         return "Review added successfully.";
     }
 
-    /**
-     * Retrieves all reviews for a specific heritage site.
-     * @param heritageSiteId The ID of the heritage site
-     * @return List of reviews for the heritage site
-     */
-    public List<Review> getReviewsByHeritageSite(Long heritageSiteId) {
-        return reviewRepository.findAll().stream()
-                .filter(review -> review.getHeritageSite().getId().equals(heritageSiteId))
-                .toList();
-    }
-
-    /**
-     * Calculates the average rating for a heritage site.
-     * @param heritageSite The heritage site for which we are calculating the average rating
-     * @return Average rating of the heritage site
-     */
-    public double calculateAverageRating(Long heritageSite) {
-        List<Review> reviews = reviewRepository.findAll().stream()
-                .filter(review -> review.getHeritageSite().equals(heritageSite))
-                .toList();
-
-        if (reviews.isEmpty()) {
-            return 0;  // No reviews, return 0
+    //compute the rating distribution
+    public Map<Integer, Long> getRatingDistributionByUser(Long userId) {
+        List<Review> reviews = reviewRepository.findByUserId(userId);
+        Map<Integer, Long> distribution = new HashMap<>();
+        // Initialize counts for ratings 1 to 5
+        for (int i = 1; i <= 5; i++) {
+            distribution.put(i, 0L);
         }
-
-        int totalRating = reviews.stream().mapToInt(Review::getRating).sum();
-        return (double) totalRating / reviews.size();
+        // Count reviews for each rating
+        reviews.stream()
+                .collect(Collectors.groupingBy(Review::getRating, Collectors.counting()))
+                .forEach((rating, count) -> distribution.put(rating.intValue(), count));
+        return distribution;
     }
 
-    /**
-     * Retrieves flagged reviews.
-     * @return List of flagged reviews
-     */
+    @Override
+    public Review updateReview(Long id, Review reviewDetails) {
+        Optional<Review> optionalReview = reviewRepository.findById(id);
+        if (optionalReview.isPresent()) {
+            Review existingReview = optionalReview.get();
+            existingReview.setRating(reviewDetails.getRating());
+            existingReview.setComment(reviewDetails.getComment());
+            existingReview.setFlagged(reviewDetails.isFlagged());
+            // Update the heritage site by setting idSite
+            if (reviewDetails.getHeritageSite() != null) {
+                existingReview.setHeritageSite(reviewDetails.getHeritageSite());
+            }
+            return reviewRepository.save(existingReview);
+        } else {
+            throw new RuntimeException("Review not found with id " + id);
+        }
+    }
+
+    @Override
+    public void deleteReview(Long id) {
+        reviewRepository.deleteById(id);
+    }
+
+    // =============== SPECIALIZED OPERATIONS ===============
+
+    @Override
+    public List<Review> getReviewsByUser(Long userId) {
+        return reviewRepository.findByUserId(userId);
+    }
+
+    @Override
+    public List<Review> getReviewsByHeritageSite(Long heritageSiteId) {
+        return reviewRepository.findByHeritageSiteIdOrderByRatingDesc(heritageSiteId);
+    }
+
+    @Override
+    public double calculateAverageRating(Long heritageSiteId) {
+        return reviewRepository.findByHeritageSiteId(heritageSiteId)
+                .stream()
+                .mapToInt(Review::getRating)
+                .average()
+                .orElse(0.0);
+    }
+
+    @Override
     public List<Review> getFlaggedReviews() {
         return reviewRepository.findByFlaggedTrue();
     }
 
-    /**
-     * Retrieves reviews with a rating greater than or equal to the specified rating.
-     * @param rating Rating threshold
-     * @return List of reviews
-     */
+    @Override
     public List<Review> getReviewsByRating(int rating) {
         return reviewRepository.findByRatingGreaterThanEqual(rating);
     }
 
-    /**
-     * Retrieves reviews that contain a specific keyword in the comment.
-     * @param keyword Keyword to search in the comment
-     * @return List of reviews
-     */
+    @Override
     public List<Review> getReviewsByKeywordInComment(String keyword) {
         return reviewRepository.findByCommentContaining(keyword);
     }
 
-    /**
-     * Removes a review from a heritage site.
-     * @param userId The user ID who made the review
-     * @param heritageSiteId The heritage site ID
-     * @return Success or failure message
-     */
+    @Override
     public String removeReview(Long userId, Long heritageSiteId) {
-        // Check if the review exists using the custom query method
         if (reviewRepository.existsByUserIdAndHeritageSiteId(userId, heritageSiteId)) {
-            // Delete the review using the custom delete method
             reviewRepository.deleteByUserIdAndHeritageSiteId(userId, heritageSiteId);
             return "Review removed successfully.";
         }
-
         return "Review not found.";
     }
+    @Override
+    public List<Review> getReviewsByUserName(String name) {
+        return reviewRepository.findByUserFirstNameContainingIgnoreCaseOrUserLastNameContainingIgnoreCase(name, name);
+    }
+
+
+    @Override
+    public List<Review> getReviewsWithFilters(Long heritageSiteId, Integer minRating, String userName, String keyword) {
+        // Use the custom repository method to apply all filters in a single query
+        return reviewRepository.findReviewsWithFilters(
+                heritageSiteId,
+                minRating,
+                userName != null ? userName.trim() : null,
+                keyword != null ? keyword.trim() : null
+        );
+    }
+
+
+
+
+
 }
