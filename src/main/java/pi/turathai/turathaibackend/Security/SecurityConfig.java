@@ -3,7 +3,6 @@ package pi.turathai.turathaibackend.Security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -16,6 +15,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import pi.turathai.turathaibackend.Services.CustomUserDetailsService;
 
 @Configuration
@@ -29,13 +29,35 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/users").permitAll()
-                        .requestMatchers("/Sites/**").permitAll()
-                        .requestMatchers("/reviews/**").permitAll()
-                        .requestMatchers("/Categories/**").permitAll()
+                        .requestMatchers("/api/auth/**").permitAll()  // Allow auth endpoints
+                        .requestMatchers("/api/users/**").permitAll()  // Explicitly allow registration
+                        .requestMatchers("/api/auth/forgot-password", "/api/auth/reset-password").permitAll()
+                        .requestMatchers("/api/badges/**").permitAll()
+                        .requestMatchers("/api/businesses/**").permitAll()
+                        .requestMatchers("/api/Categories/**").permitAll()
+                        .requestMatchers("/api/comments/**").permitAll()
+                        .requestMatchers("/api/crowd-heatmaps/**").permitAll()
+                        .requestMatchers("/api/earned/**").permitAll()
+                        .requestMatchers("/api/events/**").permitAll()
+                        .requestMatchers("/api/forums/**").permitAll()
+                        .requestMatchers("/api/Sites/**").permitAll()
+                        .requestMatchers("/api/itineries/**").permitAll()
+                        .requestMatchers("/api/reviews/**").permitAll()
+                        .requestMatchers("/api/local-insights/**").permitAll()
+                        .requestMatchers("/api/stops/**").permitAll()
+                        .requestMatchers("/api/user-preferences/**").permitAll()
+                        .requestMatchers("/api/wishlist/**").permitAll()
+                        .requestMatchers("/api/upload", "/assets/**").permitAll()
                         .requestMatchers("/images/**").permitAll()
+                        .requestMatchers("/api/export/**").permitAll()  // Add this line
+                        .requestMatchers("/api/itineries/export/**").permitAll()
+                        .requestMatchers("/api/export/**").permitAll()  // Add this line
+                        .requestMatchers("/api/itineries/**").permitAll()
+                        .requestMatchers("/api/qrcode/**").permitAll()  // Allow auth endpoints
+                        .requestMatchers("/api/sms/**").permitAll()
+                        .requestMatchers("/api/**").authenticated()  // Secure other API endpoints
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+
                         .anyRequest().authenticated()
                 )
                 .csrf(csrf -> csrf.disable())

@@ -1,5 +1,6 @@
 package pi.turathai.turathaibackend.Services;
 
+import pi.turathai.turathaibackend.DTO.CommentDTO;
 import pi.turathai.turathaibackend.Entites.Comment;
 import java.util.List;
 import java.util.Optional;
@@ -10,4 +11,5 @@ public interface ICommentService {
     Optional<Comment> getCommentById(Long id);
     List<Comment> getCommentsByForum(Long forumId);
     void deleteComment(Long id);
+    Comment updateComment(Long id, CommentDTO dto);
 }

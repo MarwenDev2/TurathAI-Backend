@@ -1,10 +1,11 @@
-package pi.turathai.turathaibackend.services;
+package pi.turathai.turathaibackend.Services;
 
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pi.turathai.turathaibackend.Entites.Stop;
-import pi.turathai.turathaibackend.repository.StopRepo;
+import pi.turathai.turathaibackend.Repositories.StopRepo;
 
 import java.util.List;
 
@@ -43,5 +44,24 @@ public class StopService implements IStopService {
     public List<Stop> getAll() {
         log.info("Fetching all stops");
         return stopRepository.findAll();
+    }
+    @Override
+    public List<Stop> getByItineraryId(long itineraryId) {
+        log.info("Fetching stops for itinerary with ID: {}", itineraryId);
+        return stopRepository.findByItineryId(itineraryId);
+    }
+    @Transactional
+    public List<Stop> reorderStops(List<Stop> stops) {
+        // Validate all stops belong to the same itinerary
+        Long itineraryId = stops.isEmpty() ? null : stops.get(0).getItinery().getId();
+
+        for (Stop stop : stops) {
+            if (stop.getItinery() == null || !stop.getItinery().getId().equals(itineraryId)) {
+                throw new IllegalArgumentException("All stops must belong to the same itinerary");
+            }
+        }
+
+        // Save all stops with their new order
+        return stopRepository.saveAll(stops);
     }
 }

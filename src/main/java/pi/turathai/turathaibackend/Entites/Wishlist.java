@@ -23,6 +23,7 @@ public class Wishlist {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // Primary key
 
+    @Column(nullable = false)
     private Date createdAt;
 
     @ManyToOne

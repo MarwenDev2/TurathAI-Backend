@@ -9,4 +9,6 @@ public interface IEventsService {
     Event createEvent(Event event);
     Event updateEvent(Long id, Event event);
     void deleteEvent(Long id);
+    long countAllEvents();
+    long countUpcomingEvents();
 }

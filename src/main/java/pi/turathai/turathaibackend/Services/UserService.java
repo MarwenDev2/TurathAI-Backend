@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pi.turathai.turathaibackend.Entites.User;
-import pi.turathai.turathaibackend.Entites.UserPreferences;
 import pi.turathai.turathaibackend.Repositories.*;
 
 import java.util.List;
@@ -40,7 +39,6 @@ public class UserService implements IUserService {
             return userRepository.save(userDetails);
         }).orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
     }
-
     @Override
     public void deleteUser(Long userId) {
         userRepository.deleteById(userId);
@@ -55,5 +53,22 @@ public class UserService implements IUserService {
     public boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
     }
+
+    @Override
+    public User getLastCreatedUser() {
+        return userRepository.findTopByOrderByIdDesc(); // assuming 'id' is your PK
+    }
+
+    @Override
+    public void changeUserPassword(User user, String newPassword) {
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
+
+    @Override
+    public List<String> getAllUserEmails() {
+        return userRepository.findAllEmails();
+    }
+
 
 }

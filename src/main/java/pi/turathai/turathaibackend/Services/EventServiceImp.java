@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import pi.turathai.turathaibackend.Entites.Event;
 import pi.turathai.turathaibackend.Repositories.EventRepository;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -42,5 +43,16 @@ public class EventServiceImp implements IEventsService{
     @Override
     public void deleteEvent(Long id) {
         eventRepository.deleteById(id);
+    }
+
+    @Override
+    public long countAllEvents() {
+        return eventRepository.count();
+    }
+
+    @Override
+    public long countUpcomingEvents() {
+        Date currentDate = new Date();
+        return eventRepository.countByStartDateAfter(currentDate);
     }
 }

@@ -12,26 +12,75 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pi.turathai.turathaibackend.DTO.HeritageSiteDTO;
 import pi.turathai.turathaibackend.Entites.HeritageSite;
-import pi.turathai.turathaibackend.Repositories.HeritageSiteRepo;
+import pi.turathai.turathaibackend.Services.MailingService;
 import pi.turathai.turathaibackend.Services.HeritageSiteService;
-
+import pi.turathai.turathaibackend.Services.UserService;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
-
+import java.util.concurrent.CompletableFuture;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/Sites")
+@RequestMapping("/api/Sites")
 @CrossOrigin(origins = "*")
 public class HeritageSiteController {
+
+
+    private static final Logger logger = LoggerFactory.getLogger(HeritageSiteController.class);
 
     @Autowired
     private HeritageSiteService heritageSiteService;
 
+    @Autowired
+    private UserService userService ;
+
+    @Autowired
+    private MailingService emailService;
+
+
+
     @PostMapping("/addSite")
-    public HeritageSiteDTO addSite(@RequestBody HeritageSiteDTO dto) {
-        return heritageSiteService.addFromDTO(dto);
+    public ResponseEntity<HeritageSiteDTO> addSite(@RequestBody HeritageSiteDTO dto) {
+        try {
+            // 1. Add the site
+            HeritageSiteDTO newSite = heritageSiteService.addFromDTO(dto);
+
+            // 2. Get all user emails
+            List<String> userEmails = userService.getAllUserEmails();
+
+            // 3. Create email subject
+            String subject = "New Heritage Site Added: " + newSite.getName();
+
+            // 4. Send emails asynchronously
+            CompletableFuture.runAsync(() -> {
+                for (String email : userEmails) {
+                    try {
+                        emailService.sendEmail(
+                                email,
+                                subject,
+                                newSite.getName(),
+                                newSite.getLocation(),
+                                newSite.getDescription()
+                        );
+                    } catch (Exception e) {
+                        logger.error("Failed to send email to {}", email, e);
+                    }
+                }
+            });
+
+            // 5. Return success response
+            return ResponseEntity.status(HttpStatus.CREATED).body(newSite);
+
+        } catch (Exception e) {
+            logger.error("Failed to add heritage site", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
+
+
 
     @PutMapping("/updateSite")
     public HeritageSiteDTO updateSite(@RequestBody HeritageSiteDTO dto) {
@@ -109,5 +158,4 @@ public class HeritageSiteController {
     public List<HeritageSite> searchSites(@RequestParam(required = false) String keyword) {
         return heritageSiteService.searchSites(keyword);
     }
-
 }

@@ -57,4 +57,19 @@ public class UserServiceImpl implements IUserService {
         return userRepository.existsByEmail(email);
     }
 
+    @Override
+    public User getLastCreatedUser() {
+        return userRepository.findTopByOrderByIdDesc(); // assuming 'id' is your PK
+    }
+
+    @Override
+    public void changeUserPassword(User user, String newPassword) {
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
+    @Override
+    public List<String> getAllUserEmails() {
+        return userRepository.findAllEmails();
+    }
+
 }

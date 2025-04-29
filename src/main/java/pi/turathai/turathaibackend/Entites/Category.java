@@ -18,8 +18,8 @@ public class Category {
 
     private String name;
 
-
-    @JsonIgnore @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    @JsonIgnore
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<HeritageSite> heritageSites;
 
 }

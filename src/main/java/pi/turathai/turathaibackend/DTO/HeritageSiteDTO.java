@@ -20,6 +20,12 @@ public class HeritageSiteDTO {
     private HeritageSite site;
     private double averageRating;
 
+    private String expectedPopularity;  // e.g., "Low", "Medium", "High"
+
+    public void setExpectedPopularity(String expectedPopularity) {
+        this.expectedPopularity = expectedPopularity;
+    }
+
     public HeritageSiteDTO(){}
 
     public HeritageSiteDTO(HeritageSite site , double averageRating)

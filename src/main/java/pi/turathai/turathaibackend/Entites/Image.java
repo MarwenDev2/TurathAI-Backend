@@ -34,11 +34,4 @@ public class Image {
     @JsonIgnore
     private Set<Business> businesses;
 
-
-    @Transient
-    private String previewUrl;
-    public String getPreviewUrl() {
-        return "http://localhost:9090/images/" + this.id;
-    }
-
 }

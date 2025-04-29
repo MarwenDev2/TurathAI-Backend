@@ -1,14 +1,20 @@
-package pi.turathai.turathaibackend.controller;
+package pi.turathai.turathaibackend.Controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pi.turathai.turathaibackend.DTO.ItineraryStatisticsDTO;
 import pi.turathai.turathaibackend.Entites.Itinery;
-import pi.turathai.turathaibackend.services.IItineryService;
+import pi.turathai.turathaibackend.Services.IItineryService;
 
 import java.util.List;
+import java.util.Map;
 
+@CrossOrigin(origins= "http://localhost:4200")
 @RestController
-@RequestMapping("/itineries")
+@RequiredArgsConstructor
+@RequestMapping("/api/itineries")
 public class ItenaryController {
 
     @Autowired
@@ -37,5 +43,33 @@ public class ItenaryController {
     @GetMapping("/all")
     public List<Itinery> getAllItineries() {
         return itineryService.getAll();
+    }
+
+    @GetMapping("/statistics")
+    public ResponseEntity<ItineraryStatisticsDTO> getStatistics() {
+        return ResponseEntity.ok(itineryService.getStatistics()); // Fixed: using instance variable
+    }
+
+    @GetMapping("/user/{userId}")
+    public List<Itinery> getItinerariesByUserId(@PathVariable Long userId) {
+        return itineryService.getItinerariesByUserId(userId);
+    }
+
+    @PostMapping("/assign")
+    public Itinery assignItineraryToUser(@RequestBody Map<String, Long> payload) {
+        Long itineraryId = payload.get("itineraryId");
+        Long userId = payload.get("userId");
+        return itineryService.assignItineraryToUser(itineraryId, userId);
+    }
+
+    @DeleteMapping("/unassign/{itineraryId}")
+    public ResponseEntity<Void> removeItineraryFromUser(@PathVariable Long itineraryId) {
+        itineryService.removeItineraryFromUser(itineraryId);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/site/{siteId}")
+    public List<Itinery> getItinerariesBySiteId(@PathVariable Long siteId) {
+        return itineryService.getItinerariesBySiteId(siteId);
     }
 }

@@ -1,14 +1,15 @@
-package pi.turathai.turathaibackend.controller;
+package pi.turathai.turathaibackend.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pi.turathai.turathaibackend.Entites.CrowdHeatMap;
-import pi.turathai.turathaibackend.services.ICrowdHeatMapService;
+import pi.turathai.turathaibackend.Services.ICrowdHeatMapService;
 
 import java.util.List;
 
+@CrossOrigin(origins= "http://Localhost:4200")
 @RestController
-@RequestMapping("/crowd-heatmaps")
+@RequestMapping("/api/crowd-heatmaps")
 public class CrowdHeatMapController {
 
     @Autowired
