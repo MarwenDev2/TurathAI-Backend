@@ -1,14 +1,19 @@
 package pi.turathai.turathaibackend.Services;
 import pi.turathai.turathaibackend.DTO.ItineraryStatisticsDTO;
+import pi.turathai.turathaibackend.Entites.Stop;
+import pi.turathai.turathaibackend.Entites.User;
 import pi.turathai.turathaibackend.Repositories.ItenaryRepo;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pi.turathai.turathaibackend.Entites.Itinery;
+import pi.turathai.turathaibackend.Repositories.StopRepo;
+import pi.turathai.turathaibackend.Repositories.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -16,6 +21,12 @@ public class ItenaryService implements IItineryService {
 
     @Autowired
     private ItenaryRepo itenaryRepository;
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private StopRepo stopRepo;
+
 
     @Override
     public Itinery add(Itinery itinery) {
@@ -50,6 +61,7 @@ public class ItenaryService implements IItineryService {
         log.info("Fetching all itineries");
         return itenaryRepository.findAll();
     }
+
 
     @Override
     public ItineraryStatisticsDTO getStatistics() {
@@ -87,5 +99,47 @@ public class ItenaryService implements IItineryService {
                 minBudget,
                 maxBudget
         );
+    }
+
+    @Override
+    public List<Itinery> getItinerariesByUserId(Long userId) {
+        log.info("Fetching itineraries for user with ID: {}", userId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+        return itenaryRepository.findByUser(user);
+    }
+
+    @Override
+    public Itinery assignItineraryToUser(Long itineraryId, Long userId) {
+        log.info("Assigning itinerary {} to user {}", itineraryId, userId);
+        Itinery itinery = itenaryRepository.findById(itineraryId)
+                .orElseThrow(() -> new RuntimeException("Itinerary not found with id: " + itineraryId));
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+
+        itinery.setUser(user);
+        return itenaryRepository.save(itinery);
+    }
+
+    @Override
+    public void removeItineraryFromUser(Long itineraryId) {
+        log.info("Removing user association from itinerary with ID: {}", itineraryId);
+        Itinery itinery = itenaryRepository.findById(itineraryId)
+                .orElseThrow(() -> new RuntimeException("Itinerary not found with id: " + itineraryId));
+
+        itinery.setUser(null);
+        itenaryRepository.save(itinery);
+    }
+
+    @Override
+    public List<Itinery> getItinerariesBySiteId(Long siteId) {
+        log.info("Fetching itineraries for site with ID: {}", siteId);
+        List<Stop> stops = stopRepo.findByHeritageSiteId(siteId);
+
+        return stops.stream()
+                .map(Stop::getItinery)
+                .distinct()
+                .collect(Collectors.toList());
     }
 }

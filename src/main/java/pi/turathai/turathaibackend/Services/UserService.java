@@ -65,4 +65,9 @@ public class UserService implements IUserService {
         userRepository.save(user);
     }
 
+
+    public List<String> getAllUserEmails() {
+        return userRepository.findAllEmails();
+    }
+
 }

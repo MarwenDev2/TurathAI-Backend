@@ -64,4 +64,8 @@ public class StopService implements IStopService {
         // Save all stops with their new order
         return stopRepository.saveAll(stops);
     }
+
+    public void deleteByItineraryId(Long itineraryId) {
+        stopRepository.deleteByItineryId(itineraryId);
+    }
 }

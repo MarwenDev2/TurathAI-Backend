@@ -51,7 +51,9 @@ public class HeritageSiteService implements IHeritageSite {
         site.setLocation(dto.getLocation());
         site.setDescription(dto.getDescription());
         site.setHistoricalSignificance(dto.getHistoricalSignificance());
-        site.setPopularityScore(dto.getPopularityScore());
+        int popularityScore = mapPopularityToScore(dto.getExpectedPopularity());
+        site.setPopularityScore(popularityScore);
+
 
         Category category = categoryRepo.findById(dto.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Category not found with ID: " + dto.getCategoryId()));
@@ -78,8 +80,8 @@ public class HeritageSiteService implements IHeritageSite {
         site.setLocation(dto.getLocation());
         site.setDescription(dto.getDescription());
         site.setHistoricalSignificance(dto.getHistoricalSignificance());
-        site.setPopularityScore(dto.getPopularityScore());
-
+        int popularityScore = mapPopularityToScore(dto.getExpectedPopularity());
+        site.setPopularityScore(popularityScore);
         Category category = categoryRepo.findById(dto.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Category not found with ID: " + dto.getCategoryId()));
         site.setCategory(category);
@@ -146,5 +148,18 @@ public class HeritageSiteService implements IHeritageSite {
 
     public long countSites() {
         return heritageSiteRepo.count();
+    }
+
+    private int mapPopularityToScore(String popularity) {
+        switch (popularity.toLowerCase()) {
+            case "high":
+                return 8;
+            case "medium":
+                return 5;
+            case "low":
+                return 3;
+            default:
+                return 3;  // Default to low if not specified
+        }
     }
 }

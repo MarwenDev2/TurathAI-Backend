@@ -1,10 +1,15 @@
 package pi.turathai.turathaibackend.Controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pi.turathai.turathaibackend.Entites.Review;
+import pi.turathai.turathaibackend.Repositories.ReviewRepository;
 import pi.turathai.turathaibackend.Services.ReviewService;
 
 import java.util.HashMap;
@@ -18,6 +23,7 @@ import java.util.Map;
 public class ReviewController {
 
     private final ReviewService reviewService;
+    private final  ReviewRepository reviewRepository;
 
     @PostMapping
     public ResponseEntity<Map<String, String>> addReview(@RequestBody Review review) {
@@ -36,6 +42,43 @@ public class ReviewController {
         return reviewService.getReviewById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    // New endpoint for paginated reviews
+    @GetMapping("/user/{userId}/paginated")
+    public ResponseEntity<Map<String, Object>> getReviewsByUserPaginated(
+            @PathVariable Long userId,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "5") int pageSize,
+            @RequestParam(required = false) String comment,
+            @RequestParam(required = false) String date,
+            @RequestParam(required = false) Integer rating) {
+        Map<String, Object> response = reviewService.getReviewsByUserPaginated(userId, page, pageSize, comment, date, rating);
+        return ResponseEntity.ok(response);
+    }
+
+
+    @GetMapping("/user/{userId}/average-rating")
+    public ResponseEntity<Double> getAverageRatingByUser(@PathVariable Long userId) {
+        Double averageRating = reviewService.getAverageRatingByUser(userId);
+        return ResponseEntity.ok(averageRating);
+    }
+
+    @GetMapping("/user/{userId}/rating-distribution")
+    public ResponseEntity<Map<Integer, Long>> getRatingDistributionByUser(@PathVariable Long userId) {
+        Map<Integer, Long> distribution = reviewService.getRatingDistributionByUser(userId);
+        return ResponseEntity.ok(distribution);
+    }
+
+    // Endpoint for recent reviews
+    @GetMapping("/user/{userId}/recent")
+    public ResponseEntity<List<Review>> getRecentReviewsByUser(
+            @PathVariable Long userId,
+            @RequestParam(defaultValue = "5") int limit) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(0, limit, sort);
+        Page<Review> recentReviews = reviewRepository.findByUserId(userId, pageable);
+        return ResponseEntity.ok(recentReviews.getContent());
     }
 
     @PutMapping("/{id}")
@@ -97,6 +140,8 @@ public class ReviewController {
     ) {
         return reviewService.getReviewsWithFilters(heritageSiteId, minRating, userName, keyword);
     }
+
+
 
 
 }

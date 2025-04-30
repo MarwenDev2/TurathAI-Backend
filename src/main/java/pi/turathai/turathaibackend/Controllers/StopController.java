@@ -52,4 +52,10 @@ public class StopController {
     public List<Stop> getAllStops() {
         return stopService.getAll();
     }
+
+    @DeleteMapping("/itinerary/{itineraryId}")
+    public ResponseEntity<Void> deleteByItineraryId(@PathVariable Long itineraryId) {
+        stopService.deleteByItineraryId(itineraryId);
+        return ResponseEntity.noContent().build();
+    }
 }

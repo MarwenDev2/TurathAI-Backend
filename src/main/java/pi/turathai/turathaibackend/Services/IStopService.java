@@ -1,7 +1,6 @@
 package pi.turathai.turathaibackend.Services;
 
 import pi.turathai.turathaibackend.Entites.Stop;
-
 import java.util.List;
 
 public interface IStopService {
@@ -12,4 +11,5 @@ public interface IStopService {
     Stop getById(long id);
     List<Stop> getAll();
     List<Stop> reorderStops(List<Stop> stops);
+    void deleteByItineraryId(Long itineraryId); // Add this method
 }

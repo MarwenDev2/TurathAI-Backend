@@ -19,6 +19,7 @@ public class HeritageSiteDTO {
 
     private HeritageSite site;
     private double averageRating;
+    private String expectedPopularity;
 
     public HeritageSiteDTO(){}
 
@@ -28,4 +29,83 @@ public class HeritageSiteDTO {
         this.averageRating = averageRating ;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getHistoricalSignificance() {
+        return historicalSignificance;
+    }
+
+    public void setHistoricalSignificance(String historicalSignificance) {
+        this.historicalSignificance = historicalSignificance;
+    }
+
+    public int getPopularityScore() {
+        return popularityScore;
+    }
+
+    public void setPopularityScore(int popularityScore) {
+        this.popularityScore = popularityScore;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public Set<Long> getImageIds() {
+        return imageIds;
+    }
+
+    public void setImageIds(Set<Long> imageIds) {
+        this.imageIds = imageIds;
+    }
+
+    public HeritageSite getSite() {
+        return site;
+    }
+
+    public void setSite(HeritageSite site) {
+        this.site = site;
+    }
+
+    public double getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(double averageRating) {
+        this.averageRating = averageRating;
+    }
 }

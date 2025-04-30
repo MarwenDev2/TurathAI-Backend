@@ -34,4 +34,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = "SELECT * FROM user ORDER BY created_at DESC LIMIT ?1", nativeQuery = true)
     List<User> findTopNByOrderByCreatedAtDesc(int limit);
+
+    @Query("SELECT u.email FROM User u")
+    List<String> findAllEmails();
 }

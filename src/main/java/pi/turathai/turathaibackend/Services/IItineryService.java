@@ -13,4 +13,11 @@ public interface IItineryService {
     void remove(long id);
     Itinery getById(long id);
     List<Itinery> getAll();
+
+    List<Itinery> getItinerariesByUserId(Long userId);  // Add this method
+    Itinery assignItineraryToUser(Long itineraryId, Long userId);
+    void removeItineraryFromUser(Long itineraryId);
+
+    List<Itinery> getItinerariesBySiteId(Long siteId);
+
 }

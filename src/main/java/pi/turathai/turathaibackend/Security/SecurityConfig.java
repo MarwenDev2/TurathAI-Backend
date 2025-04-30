@@ -32,10 +32,16 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()  // Allow auth endpoints
                         .requestMatchers("/api/users/**").permitAll()  // Explicitly allow registration
                         .requestMatchers("/api/auth/forgot-password", "/api/auth/reset-password").permitAll()
+                                .requestMatchers("/api/forums", "/api/forums/**").permitAll()
+// ... later ...
+                                .requestMatchers("/api/forums/**").permitAll()
+// ... later ...
                         .requestMatchers("/api/badges/**").permitAll()
                         .requestMatchers("/api/businesses/**").permitAll()
                         .requestMatchers("/api/Categories/**").permitAll()
                         .requestMatchers("/api/comments/**").permitAll()
+                        .requestMatchers("/api/forums/{forumId}/comments").permitAll()
+                        .requestMatchers("/api/comments/forums/").permitAll()
                         .requestMatchers("/api/crowd-heatmaps/**").permitAll()
                         .requestMatchers("/api/earned/**").permitAll()
                         .requestMatchers("/api/events/**").permitAll()
@@ -44,15 +50,19 @@ public class SecurityConfig {
                         .requestMatchers("/api/itineries/**").permitAll()
                         .requestMatchers("/api/reviews/**").permitAll()
                         .requestMatchers("/api/local-insights/**").permitAll()
+                        .requestMatchers("/api/local-insights/insights-by-type").permitAll()
                         .requestMatchers("/api/stops/**").permitAll()
                         .requestMatchers("/api/user-preferences/**").permitAll()
                         .requestMatchers("/api/wishlist/**").permitAll()
                         .requestMatchers("/api/upload", "/assets/**").permitAll()
+
                         .requestMatchers("/images/**").permitAll()
                         .requestMatchers("/api/export/**").permitAll()  // Add this line
                         .requestMatchers("/api/itineries/export/**").permitAll()
                         .requestMatchers("/api/export/**").permitAll()  // Add this line
                         .requestMatchers("/api/itineries/**").permitAll()
+                        .requestMatchers("/api/auth/forgot-password").permitAll()
+                        .requestMatchers("/api/auth/social-login").permitAll()
                         .requestMatchers("/api/qrcode/**").permitAll()  // Allow auth endpoints
                         .requestMatchers("/api/sms/**").permitAll()
                         .requestMatchers("/api/**").authenticated()  // Secure other API endpoints
@@ -68,9 +78,10 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("*"); // Allow all origins (replace with your frontend URL)
+        configuration.addAllowedOrigin("http://localhost:4200");
         configuration.addAllowedMethod("*"); // Allow all HTTP methods
         configuration.addAllowedHeader("*"); // Allow all headers
+        configuration.addExposedHeader("Authorization");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

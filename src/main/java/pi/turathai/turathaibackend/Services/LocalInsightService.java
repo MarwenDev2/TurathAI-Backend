@@ -3,13 +3,12 @@ package pi.turathai.turathaibackend.Services;
 
 
 
-import jakarta.mail.MessagingException;
+
 import jakarta.mail.internet.MimeMessage;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.mail.MailAuthenticationException;
-import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
+
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -18,7 +17,10 @@ import pi.turathai.turathaibackend.Repositories.LocalInsightRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class LocalInsightService implements ILocalInsight {
@@ -33,21 +35,49 @@ public class LocalInsightService implements ILocalInsight {
                                LocalInsightRepository localInsightRepository) {
         this.mailSender = mailSender;
         this.localInsightRepository = localInsightRepository;
+
     }
 
+
+    @Transactional
+    public LocalInsight incrementLike(Long id) {
+        LocalInsight insight = localInsightRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("LocalInsight not found with id: " + id));
+
+        insight.setLikes(insight.getLikes() + 1);
+        return localInsightRepository.save(insight);
+    }
+
+    @Transactional
+    public LocalInsight incrementDislike(Long id) {
+        LocalInsight insight = localInsightRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("LocalInsight not found with id: " + id));
+
+        insight.setDislikes(insight.getDislikes() + 1);
+        return localInsightRepository.save(insight);
+    }
     @Override
-    public List<LocalInsight> getAllLocalInsights() {
-        return localInsightRepository.findAll();
+    public LocalInsight saveLocalInsight(LocalInsight localInsight) {
+        return localInsightRepository.save(localInsight);
     }
 
     @Override
     public Optional<LocalInsight> getLocalInsightById(Long id) {
         return localInsightRepository.findById(id);
     }
-
     @Override
-    public LocalInsight saveLocalInsight(LocalInsight localInsight) {
-        return localInsightRepository.save(localInsight);
+    public List<LocalInsight> getAllLocalInsights() {
+        return localInsightRepository.findAll();
+    }
+
+    public List<Map<String, Object>> getInsightsByType() {
+        List<Object[]> results = localInsightRepository.countByType();
+        return results.stream()
+                .map(result -> Map.of(
+                        "type", result[0],
+                        "count", result[1]
+                ))
+                .collect(Collectors.toList());
     }
 
     @Override

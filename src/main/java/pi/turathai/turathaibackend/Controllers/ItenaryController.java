@@ -9,6 +9,7 @@ import pi.turathai.turathaibackend.Entites.Itinery;
 import pi.turathai.turathaibackend.Services.IItineryService;
 
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins= "http://localhost:4200")
 @RestController
@@ -48,4 +49,28 @@ public class ItenaryController {
     public ResponseEntity<ItineraryStatisticsDTO> getStatistics() {
         return ResponseEntity.ok(itineryService.getStatistics()); // Fixed: using instance variable
     }
+
+    @GetMapping("/site/{siteId}")
+    public List<Itinery> getItinerariesBySiteId(@PathVariable Long siteId) {
+        return itineryService.getItinerariesBySiteId(siteId);
+    }
+
+    @GetMapping("/user/{userId}")
+    public List<Itinery> getItinerariesByUserId(@PathVariable Long userId) {
+        return itineryService.getItinerariesByUserId(userId);
+    }
+
+    @PostMapping("/assign")
+    public Itinery assignItineraryToUser(@RequestBody Map<String, Long> payload) {
+        Long itineraryId = payload.get("itineraryId");
+        Long userId = payload.get("userId");
+        return itineryService.assignItineraryToUser(itineraryId, userId);
+    }
+
+    @DeleteMapping("/unassign/{itineraryId}")
+    public ResponseEntity<Void> removeItineraryFromUser(@PathVariable Long itineraryId) {
+        itineryService.removeItineraryFromUser(itineraryId);
+        return ResponseEntity.ok().build();
+    }
+
 }
