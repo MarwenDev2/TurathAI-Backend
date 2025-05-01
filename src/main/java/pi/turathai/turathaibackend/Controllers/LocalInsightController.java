@@ -207,4 +207,10 @@ public class LocalInsightController {
         }
     }
 
+    @GetMapping("/site/{siteId}")
+    public ResponseEntity<List<LocalInsight>> getLocalInsightsBySiteId(@PathVariable Long siteId) {
+        List<LocalInsight> insights = localInsightService.getLocalInsightsBySiteId(siteId);
+        return ResponseEntity.ok(insights);
+    }
+
 }

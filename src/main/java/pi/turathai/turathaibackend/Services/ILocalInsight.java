@@ -13,5 +13,5 @@ public interface ILocalInsight {
     LocalInsight saveLocalInsight(LocalInsight localInsight);
     void deleteLocalInsight(Long id);
     public void sendConfirmationEmail(LocalInsight insight) ;
-
+    List<LocalInsight> getLocalInsightsBySiteId(Long siteId);
 }

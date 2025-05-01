@@ -3,7 +3,11 @@ package pi.turathai.turathaibackend.Services;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import pi.turathai.turathaibackend.Entites.HeritageSite;
+import pi.turathai.turathaibackend.Entites.User;
 import pi.turathai.turathaibackend.Entites.Wishlist;
+import pi.turathai.turathaibackend.Repositories.HeritageSiteRepo;
+import pi.turathai.turathaibackend.Repositories.UserRepository;
 import pi.turathai.turathaibackend.Repositories.WishlistRepository;
 
 import java.sql.Date;
@@ -14,31 +18,37 @@ import java.util.Optional;
 public class WishlistService implements IWishlistService {
 
     private final WishlistRepository wishlistRepository;
-
-    public WishlistService(WishlistRepository wishlistRepository) {
+    private final UserRepository userRepository;
+    private final HeritageSiteRepo heritageSiteRepository;
+    public WishlistService(WishlistRepository wishlistRepository, UserRepository userRepository, HeritageSiteRepo heritageSiteRepository) {
         this.wishlistRepository = wishlistRepository;
+        this.userRepository = userRepository;
+        this.heritageSiteRepository = heritageSiteRepository;
     }
 
-    /*** Adds an entry to the wishlist. Prevents duplicate entries.
-     * @param wishlist Wishlist entity containing user & heritage site
-     * @return Success or failure message */
     @Override
-    public String addToWishlist(Wishlist wishlist) {
-        if (wishlist == null || wishlist.getUser() == null || wishlist.getHeritageSite() == null) {
-            return "Invalid wishlist data";
-        }
-
-        // Check for duplicate entry
-        if (wishlistRepository.existsByUserIdAndHeritageSiteId(
-                wishlist.getUser().getId(), wishlist.getHeritageSite().getId())) {
+    public String addToWishlist(Long userId, Long heritageSiteId) {
+        // Check if already in wishlist
+        if (wishlistRepository.existsByUserIdAndHeritageSiteId(userId, heritageSiteId)) {
             return "Already in wishlist";
         }
 
-        // Set created date
-        wishlist.setCreatedAt(new Date(System.currentTimeMillis()));
+        // Retrieve User
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Save and return
+        // Retrieve Heritage Site
+        HeritageSite site = heritageSiteRepository.findById(heritageSiteId)
+                .orElseThrow(() -> new RuntimeException("Heritage Site not found"));
+
+        // Create and Save Wishlist Entry
+        Wishlist wishlist = new Wishlist();
+        wishlist.setUser(user);
+        wishlist.setHeritageSite(site);
+        wishlist.setCreatedAt(Date.valueOf(java.time.LocalDate.now()));
+
         wishlistRepository.save(wishlist);
+
         return "Added to wishlist";
     }
 

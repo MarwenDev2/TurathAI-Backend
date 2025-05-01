@@ -116,4 +116,8 @@ public class LocalInsightService implements ILocalInsight {
         }
     }
 
+    @Override
+    public List<LocalInsight> getLocalInsightsBySiteId(Long siteId) {
+        return localInsightRepository.findBySiteId(siteId);
+    }
 }

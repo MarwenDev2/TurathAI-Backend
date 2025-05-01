@@ -68,4 +68,11 @@ public class StopService implements IStopService {
     public void deleteByItineraryId(Long itineraryId) {
         stopRepository.deleteByItineryId(itineraryId);
     }
+
+    @Override
+    public List<Stop> getBySiteId(Long siteId) {
+        log.info("Fetching stops for heritage site with ID: {}", siteId);
+        return stopRepository.findByHeritageSiteId(siteId);
+    }
+
 }

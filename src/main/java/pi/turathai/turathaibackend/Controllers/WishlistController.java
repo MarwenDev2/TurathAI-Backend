@@ -25,13 +25,13 @@ public class WishlistController {
         this.wishlistService = wishlistService;
     }
 
-    /*** Adds an item to the wishlist.
-     * @param wishlist Wishlist object received in the request body
-     * @return Response message*/
-    @PostMapping("/add")
-    public ResponseEntity<String> addToWishlist(@RequestBody Wishlist wishlist) {
-        return ResponseEntity.ok(wishlistService.addToWishlist(wishlist));
+    @PostMapping("/add/{userId}/{heritageSiteId}")
+    public ResponseEntity<String> addToWishlist(
+            @PathVariable Long userId,
+            @PathVariable Long heritageSiteId) {
+        return ResponseEntity.ok(wishlistService.addToWishlist(userId, heritageSiteId));
     }
+
 
     /*** Gets the wishlist of a user.
      * @param userId User ID whose wishlist is being fetched

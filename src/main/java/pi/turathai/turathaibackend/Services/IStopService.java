@@ -11,5 +11,8 @@ public interface IStopService {
     Stop getById(long id);
     List<Stop> getAll();
     List<Stop> reorderStops(List<Stop> stops);
-    void deleteByItineraryId(Long itineraryId); // Add this method
+    void deleteByItineraryId(Long itineraryId);
+
+    List<Stop> getBySiteId(Long siteId);
+
 }

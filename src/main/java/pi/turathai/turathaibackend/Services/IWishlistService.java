@@ -8,7 +8,7 @@ import java.sql.Date;
 import java.util.List;
 
 public interface IWishlistService {
-    String addToWishlist(Wishlist wishlist);
+    String addToWishlist(Long userId, Long heritageSiteId);
     List<Wishlist> getWishlist(Long userId);
     String removeFromWishlist(Long wishlistId);
     Page<Wishlist> getAllWishlists(String searchTerm, Date startDate, Date endDate, Pageable pageable);

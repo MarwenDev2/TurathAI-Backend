@@ -58,4 +58,10 @@ public class StopController {
         stopService.deleteByItineraryId(itineraryId);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/site/{siteId}")
+    public List<Stop> getStopsBySiteId(@PathVariable Long siteId) {
+        return stopService.getBySiteId(siteId);
+    }
+
 }

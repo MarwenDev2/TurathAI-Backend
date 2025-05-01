@@ -17,6 +17,9 @@ import java.util.Optional;
 public interface LocalInsightRepository extends JpaRepository<LocalInsight, Long> {
     @Query("SELECT li.type, COUNT(li) FROM LocalInsight li GROUP BY li.type")
     List<Object[]> countByType();
+
+    @Query("SELECT li FROM LocalInsight li WHERE li.heritageSite.id = :siteId")
+    List<LocalInsight> findBySiteId(@Param("siteId") Long siteId);
 }
 
 

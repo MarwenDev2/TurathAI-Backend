@@ -32,10 +32,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()  // Allow auth endpoints
                         .requestMatchers("/api/users/**").permitAll()  // Explicitly allow registration
                         .requestMatchers("/api/auth/forgot-password", "/api/auth/reset-password").permitAll()
-                                .requestMatchers("/api/forums", "/api/forums/**").permitAll()
-// ... later ...
-                                .requestMatchers("/api/forums/**").permitAll()
-// ... later ...
+                        .requestMatchers("/api/forums", "/api/forums/**").permitAll()
+                        .requestMatchers("/api/forums/**").permitAll()
                         .requestMatchers("/api/badges/**").permitAll()
                         .requestMatchers("/api/businesses/**").permitAll()
                         .requestMatchers("/api/Categories/**").permitAll()
@@ -54,12 +52,15 @@ public class SecurityConfig {
                         .requestMatchers("/api/stops/**").permitAll()
                         .requestMatchers("/api/user-preferences/**").permitAll()
                         .requestMatchers("/api/wishlist/**").permitAll()
+                        .requestMatchers("/api/wishlist/add").permitAll()
                         .requestMatchers("/api/upload", "/assets/**").permitAll()
-
+                        .requestMatchers("/api/reviews/heritage-site/**").permitAll()
+                        .requestMatchers("/api/stops/site").permitAll()
+                        .requestMatchers("/api/itineries/**").permitAll()
                         .requestMatchers("/images/**").permitAll()
-                        .requestMatchers("/api/export/**").permitAll()  // Add this line
+                        .requestMatchers("/api/export/**").permitAll()
                         .requestMatchers("/api/itineries/export/**").permitAll()
-                        .requestMatchers("/api/export/**").permitAll()  // Add this line
+                        .requestMatchers("/api/export/**").permitAll()
                         .requestMatchers("/api/itineries/**").permitAll()
                         .requestMatchers("/api/auth/forgot-password").permitAll()
                         .requestMatchers("/api/auth/social-login").permitAll()
