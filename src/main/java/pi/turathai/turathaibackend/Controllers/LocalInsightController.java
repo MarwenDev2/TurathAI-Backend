@@ -121,6 +121,8 @@ public class LocalInsightController {
         }
     }
 
+
+
     @DeleteMapping("/{id}/like")
     public ResponseEntity<?> removeLike(@PathVariable Long id) {
         LocalInsight insight = localInsightService.getLocalInsightById(id).orElse(null);

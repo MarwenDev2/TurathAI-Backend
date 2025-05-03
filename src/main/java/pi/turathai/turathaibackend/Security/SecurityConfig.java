@@ -58,6 +58,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/stops/site").permitAll()
                         .requestMatchers("/api/itineries/**").permitAll()
                         .requestMatchers("/images/**").permitAll()
+                        .requestMatchers("/images/video/**").permitAll()
                         .requestMatchers("/api/export/**").permitAll()
                         .requestMatchers("/api/itineries/export/**").permitAll()
                         .requestMatchers("/api/export/**").permitAll()

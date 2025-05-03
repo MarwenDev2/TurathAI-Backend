@@ -3,6 +3,7 @@ package pi.turathai.turathaibackend.Controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.MediaTypeFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,8 +11,10 @@ import pi.turathai.turathaibackend.Entites.Image;
 import org.springframework.core.io.Resource;
 import pi.turathai.turathaibackend.Repositories.ImageRepo;
 import pi.turathai.turathaibackend.Services.FileStorageService;
+import pi.turathai.turathaibackend.Services.LocalInsightService;
 
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -23,6 +26,8 @@ public class ImageController {
 
     @Autowired
     private FileStorageService storageService;
+    @Autowired
+    private LocalInsightService localInsightService;
 
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Image uploadImage(@RequestParam("file") MultipartFile file) {
@@ -36,6 +41,19 @@ public class ImageController {
         return imageRepo.save(image);
     }
 
+    @PostMapping(value = "/video-upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Map<String, String>> uploadVideo(@RequestParam("file") MultipartFile file) {
+        if (!file.getContentType().startsWith("video/")) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Only video files are allowed"));
+        }
+
+        String filename = storageService.storeFile(file);
+        return ResponseEntity.ok(Map.of(
+                "url", filename,
+                "originalName", file.getOriginalFilename()
+        ));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Resource> getImage(@PathVariable Long id) {
         Image image = imageRepo.findById(id)
@@ -46,6 +64,17 @@ public class ImageController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
                 .body(file);
     }
+
+    @GetMapping("/video/{id}")
+    public ResponseEntity<Resource> getVideo(@PathVariable Long id) {
+        String video = localInsightService.getLocalInsightById(id).get().getVideoURL();
+        Resource file = storageService.loadFile(video);
+
+        return ResponseEntity.ok()
+                .contentType(MediaTypeFactory.getMediaType(file).orElse(MediaType.APPLICATION_OCTET_STREAM))
+                .body(file);
+    }
+
 
     @GetMapping("/all")
     public List<Image> getAllImages() {
