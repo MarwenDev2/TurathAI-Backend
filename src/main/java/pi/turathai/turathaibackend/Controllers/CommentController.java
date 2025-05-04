@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @CrossOrigin(origins= "http://localhost:4200")
 @RestController
-@RequestMapping("/api/comments/forums/:forumId")
+@RequestMapping("/api/comments/")
 @RequiredArgsConstructor
 public class CommentController {
 
@@ -32,11 +32,6 @@ public class CommentController {
                 forumId  // Passer le forumId récupéré de l'URL ici
         );
         return new ResponseEntity<>(comment, HttpStatus.CREATED);
-    }
-
-    @GetMapping
-    public List<Comment> getAllComments() {
-        return commentService.getAllComments();
     }
 
     @GetMapping("/{id}")

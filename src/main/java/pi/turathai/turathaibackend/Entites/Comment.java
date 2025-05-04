@@ -25,7 +25,6 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "idUser")
-    @JsonBackReference // ↔ éviter la boucle avec User
     private User user;
 
     @ManyToOne
