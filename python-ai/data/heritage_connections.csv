@@ -1,0 +1,11 @@
+source_id,target_id,connection_type,weight
+5,3,historical,0.7
+3,4,cultural,0.7
+2,3,historical,0.8
+5,3,architectural,0.9
+4,6,cultural,0.8
+4,6,religious,0.9
+1,7,natural,0.6
+1,7,cultural,0.5
+2,5,historical,0.6
+3,6,cultural,0.7
