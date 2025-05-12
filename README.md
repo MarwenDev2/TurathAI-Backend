@@ -53,7 +53,11 @@ cd TurathAI-Backend
    ```
 4. **Access API Documentation**: Visit `http://localhost:8080/swagger-ui.html`
 5. Set Up and Run AI Services
+<<<<<<< HEAD
 
+=======
+   
+>>>>>>> abd4b9788c0e9227f66b165dbfe22694e5e0b079
 The backend integrates with three AI services implemented in Python, located in the python-ai directory. Follow these steps to set them up:
 
 a. Navigate to the AI Services Directory :
