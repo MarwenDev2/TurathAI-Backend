@@ -52,21 +52,20 @@ cd TurathAI-Backend
    mvn spring-boot:run
    ```
 4. **Access API Documentation**: Visit `http://localhost:8080/swagger-ui.html`
-5. Set Up and Run AI Services
-<<<<<<< HEAD
 
-=======
-   
->>>>>>> abd4b9788c0e9227f66b165dbfe22694e5e0b079
+5. Set Up and Run AI Services
+
 The backend integrates with three AI services implemented in Python, located in the python-ai directory. Follow these steps to set them up:
 
 a. Navigate to the AI Services Directory :
-cd python-ai
-
+```bash
+  cd python-ai
+```
 b. Set Up a Virtual Environment :
-python -m venv venv
-.\venv\Scripts\activate
-
+```bash
+  python -m venv venv
+  .\venv\Scripts\activate
+```
 c. Install Dependencies !
 .\venv\Scripts\activate
 pip install flask python-dotenv pandas flask-cors requests
@@ -74,16 +73,13 @@ pip install flask python-dotenv pandas flask-cors requests
 e. Run the AI Services
 
 Heritage Chatbot Service (Handles conversational AI for heritage-related queries):
-bash
-
-Copy
-python heritage_chatbot.py
+```bash
+  Copy  
+  python heritage_chatbot.py
+```
 This service runs on http://127.0.0.1:5001.
 Heritage Connector Service (Processes heritage data, requires pandas):
-bash
 
-Copy
-python heritage_connector.py
 Ensure any additional configuration (e.g., database credentials) is set if required by this script.
 
 ---
