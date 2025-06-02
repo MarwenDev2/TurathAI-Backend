@@ -2,16 +2,14 @@ import os
 from pathlib import Path
 import requests
 from flask import Flask, request, jsonify
-from dotenv import load_dotenv
 
-
-load_dotenv(dotenv_path=Path(__file__).parent / "chat.env")
+# Hardcoded API key instead of loading from .env file
+# This replaces the dotenv package dependency
 class HeritageChatbot:
     def __init__(self):
-        self.api_key = os.getenv("GEMINI_API_KEY")  # Utilise la variable d'environnement
+        # Hardcoded API key from the chat.env file
+        self.api_key = "AIzaSyBisr8CgSvo4qndtToLgwHL56nDrS776ec"
         print(f"API Key: {self.api_key}")
-        if not self.api_key:
-            raise ValueError("GEMINI_API_KEY environment variable is not set")
         self.model = "models/gemini-1.5-flash"
         self.api_url = f"https://generativelanguage.googleapis.com/v1beta/{self.model}:generateContent"
         self.system_prompt = self._load_system_prompt()
