@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
-@CrossOrigin(origins= "http://Localhost:4200")
+@CrossOrigin(origins= "*")
 @RestController
 @RequestMapping("/api/user-preferences")
 public class UserPreferencesController {

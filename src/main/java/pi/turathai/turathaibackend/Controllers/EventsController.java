@@ -15,7 +15,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@CrossOrigin(origins= "http://Localhost:4200")
+@CrossOrigin(origins= "*")
 @RestController
 @RequestMapping("/api/events")
 @RequiredArgsConstructor

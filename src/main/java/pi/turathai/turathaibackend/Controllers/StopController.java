@@ -9,7 +9,7 @@ import pi.turathai.turathaibackend.Services.IStopService;
 
 import java.util.List;
 
-@CrossOrigin(origins= "http://Localhost:4200")
+@CrossOrigin(origins= "*")
 @RestController
 @RequestMapping("/api/stops")
 public class StopController {

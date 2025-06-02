@@ -8,7 +8,7 @@ import pi.turathai.turathaibackend.Services.EarnedService;
 
 import java.util.List;
 
-@CrossOrigin(origins= "http://Localhost:4200")
+@CrossOrigin(origins= "*")
 @RestController
 @RequestMapping("/api/earned")
 public class EarnedController {

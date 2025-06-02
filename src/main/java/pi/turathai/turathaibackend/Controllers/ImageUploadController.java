@@ -12,7 +12,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/upload")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 public class ImageUploadController {
 
     private final String UPLOAD_DIR = "src/main/resources/static/assets/images/users/";

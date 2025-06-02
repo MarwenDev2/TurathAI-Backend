@@ -8,7 +8,7 @@ import pi.turathai.turathaibackend.Services.QRCodeService;
 import pi.turathai.turathaibackend.Services.ItenaryService;
 import java.io.IOException;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/qrcode")

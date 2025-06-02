@@ -11,7 +11,7 @@ import pi.turathai.turathaibackend.Services.IItineryService;
 import java.util.List;
 import java.util.Map;
 
-@CrossOrigin(origins= "http://localhost:4200")
+@CrossOrigin(origins= "*")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/itineries")

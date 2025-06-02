@@ -16,7 +16,7 @@ import pi.turathai.turathaibackend.Services.LocalInsightService;
 import java.util.List;
 import java.util.Map;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/images")
 public class ImageController {

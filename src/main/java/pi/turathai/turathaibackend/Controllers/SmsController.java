@@ -11,7 +11,7 @@ import pi.turathai.turathaibackend.Services.SmsService;
 
 @RestController
 @RequestMapping("/api/sms")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 public class SmsController {
 
     @Autowired

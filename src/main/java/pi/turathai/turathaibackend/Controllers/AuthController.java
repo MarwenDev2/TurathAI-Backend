@@ -14,7 +14,7 @@ import pi.turathai.turathaibackend.Services.UserService;
 import java.util.Date;
 import java.util.Map;
 
-@CrossOrigin(origins= "http://Localhost:4200")
+@CrossOrigin(origins= "*")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {

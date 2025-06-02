@@ -8,7 +8,7 @@ import pi.turathai.turathaibackend.Services.BadgeService;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins= "http://Localhost:4200")
+@CrossOrigin(origins= "*")
 @RestController
 @RequestMapping("/api/badges")
 public class BadgeController {

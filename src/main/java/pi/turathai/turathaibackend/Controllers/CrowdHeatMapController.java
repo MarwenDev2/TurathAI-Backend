@@ -7,7 +7,7 @@ import pi.turathai.turathaibackend.Services.ICrowdHeatMapService;
 
 import java.util.List;
 
-@CrossOrigin(origins= "http://Localhost:4200")
+@CrossOrigin(origins= "*")
 @RestController
 @RequestMapping("/api/crowd-heatmaps")
 public class CrowdHeatMapController {
